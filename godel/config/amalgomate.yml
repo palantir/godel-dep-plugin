@@ -1,0 +1,5 @@
+amalgomators:
+  dep:
+    config: dep.yml
+    output-dir: generated_src
+    pkg: amalgomateddep

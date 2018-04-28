@@ -1,0 +1,4 @@
+packages:
+  dep:
+    main: github.com/golang/dep/cmd/dep
+    distance-to-project-pkg: 2
