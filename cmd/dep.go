@@ -10,14 +10,18 @@ import (
 	"github.com/palantir/godel-dep-plugin/depplugin"
 )
 
-var runCmd = &cobra.Command{
-	Use:   "run [flags] [args]",
-	Short: "Run dep with the provided arguments",
+var depCmd = &cobra.Command{
+	Use:   "dep [flags] [args]",
+	Short: "Runs dep ensure for the project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return depplugin.Run(args, cmd.OutOrStdout())
+		if verifyFlagVal {
+			return depplugin.Verify()
+		}
+		return depplugin.Run([]string{"ensure"}, cmd.OutOrStdout())
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(runCmd)
+	depCmd.Flags().BoolVar(&verifyFlagVal, "verify", false, "verify files match formatting without applying formatting")
+	rootCmd.AddCommand(depCmd)
 }
