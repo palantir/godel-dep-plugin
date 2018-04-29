@@ -28,6 +28,44 @@ const godelYML = `exclude:
     - "godel"
 `
 
+func TestRunDep(t *testing.T) {
+	pluginPath, err := products.Bin("dep-plugin")
+	require.NoError(t, err)
+
+	projectDir, cleanup, err := dirs.TempDir(".", "")
+	require.NoError(t, err)
+	defer cleanup()
+
+	origWd, err := os.Getwd()
+	require.NoError(t, err)
+	defer func() {
+		err = os.Chdir(origWd)
+		require.NoError(t, err)
+	}()
+	err = os.Chdir(projectDir)
+	require.NoError(t, err)
+
+	err = os.MkdirAll(path.Join(projectDir, "godel", "config"), 0755)
+	require.NoError(t, err)
+	err = ioutil.WriteFile(path.Join(projectDir, "godel", "config", "godel.yml"), []byte(godelYML), 0644)
+	require.NoError(t, err)
+
+	_, err = os.Stat("vendor")
+	require.True(t, os.IsNotExist(err))
+
+	outputBuf := &bytes.Buffer{}
+	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "run-dep", []string{"init"}, projectDir, false, outputBuf)
+	defer runPluginCleanup()
+	require.NoError(t, err, "Output: %s", outputBuf.String())
+
+	_, err = os.Stat("vendor")
+	assert.NoError(t, err, "Output: %s", outputBuf.String())
+	_, err = os.Stat("Gopkg.lock")
+	assert.NoError(t, err, "Output: %s", outputBuf.String())
+	_, err = os.Stat("Gopkg.toml")
+	assert.NoError(t, err, "Output: %s", outputBuf.String())
+}
+
 func TestDep(t *testing.T) {
 	pluginPath, err := products.Bin("dep-plugin")
 	require.NoError(t, err)
@@ -54,45 +92,7 @@ func TestDep(t *testing.T) {
 	require.True(t, os.IsNotExist(err))
 
 	outputBuf := &bytes.Buffer{}
-	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"init"}, projectDir, false, outputBuf)
-	defer runPluginCleanup()
-	require.NoError(t, err, "Output: %s", outputBuf.String())
-
-	_, err = os.Stat("vendor")
-	assert.NoError(t, err, "Output: %s", outputBuf.String())
-	_, err = os.Stat("Gopkg.lock")
-	assert.NoError(t, err, "Output: %s", outputBuf.String())
-	_, err = os.Stat("Gopkg.toml")
-	assert.NoError(t, err, "Output: %s", outputBuf.String())
-}
-
-func TestDepVerifyApplyTrue(t *testing.T) {
-	pluginPath, err := products.Bin("dep-plugin")
-	require.NoError(t, err)
-
-	projectDir, cleanup, err := dirs.TempDir(".", "")
-	require.NoError(t, err)
-	defer cleanup()
-
-	origWd, err := os.Getwd()
-	require.NoError(t, err)
-	defer func() {
-		err = os.Chdir(origWd)
-		require.NoError(t, err)
-	}()
-	err = os.Chdir(projectDir)
-	require.NoError(t, err)
-
-	err = os.MkdirAll(path.Join(projectDir, "godel", "config"), 0755)
-	require.NoError(t, err)
-	err = ioutil.WriteFile(path.Join(projectDir, "godel", "config", "godel.yml"), []byte(godelYML), 0644)
-	require.NoError(t, err)
-
-	_, err = os.Stat("vendor")
-	require.True(t, os.IsNotExist(err))
-
-	outputBuf := &bytes.Buffer{}
-	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"init"}, projectDir, false, outputBuf)
+	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "run-dep", []string{"init"}, projectDir, false, outputBuf)
 	defer runPluginCleanup()
 	require.NoError(t, err, "Output: %s", outputBuf.String())
 
@@ -107,7 +107,7 @@ func TestDepVerifyApplyTrue(t *testing.T) {
 	require.NoError(t, err)
 
 	outputBuf = &bytes.Buffer{}
-	runPluginCleanup, err = pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"ensure"}, projectDir, false, outputBuf)
+	runPluginCleanup, err = pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", nil, projectDir, false, outputBuf)
 	defer runPluginCleanup()
 	require.NoError(t, err, "Output: %s", outputBuf.String())
 
@@ -115,7 +115,7 @@ func TestDepVerifyApplyTrue(t *testing.T) {
 	assert.NoError(t, err, "Output: %s", outputBuf.String())
 }
 
-func TestDepVerifyFalseFails(t *testing.T) {
+func TestDepVerifyApplyFalseFails(t *testing.T) {
 	pluginPath, err := products.Bin("dep-plugin")
 	require.NoError(t, err)
 
@@ -141,7 +141,7 @@ func TestDepVerifyFalseFails(t *testing.T) {
 	require.True(t, os.IsNotExist(err))
 
 	outputBuf := &bytes.Buffer{}
-	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"init"}, projectDir, false, outputBuf)
+	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "run-dep", []string{"init"}, projectDir, false, outputBuf)
 	defer runPluginCleanup()
 	require.NoError(t, err, "Output: %s", outputBuf.String())
 
@@ -163,7 +163,7 @@ func TestDepVerifyFalseFails(t *testing.T) {
 	assert.Equal(t, "", outputBuf.String())
 }
 
-func TestDepVerifyFalseExecErrorFails(t *testing.T) {
+func TestDepVerifyApplyFalseExecErrorFails(t *testing.T) {
 	pluginPath, err := products.Bin("dep-plugin")
 	require.NoError(t, err)
 
@@ -189,7 +189,7 @@ func TestDepVerifyFalseExecErrorFails(t *testing.T) {
 	require.True(t, os.IsNotExist(err))
 
 	outputBuf := &bytes.Buffer{}
-	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"init"}, projectDir, false, outputBuf)
+	runPluginCleanup, err := pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "run-dep", []string{"init"}, projectDir, false, outputBuf)
 	defer runPluginCleanup()
 	require.NoError(t, err, "Output: %s", outputBuf.String())
 

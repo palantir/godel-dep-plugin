@@ -22,13 +22,17 @@ var (
 		),
 		pluginapi.PluginInfoTaskInfo(
 			"dep",
-			"Run dep",
-			pluginapi.TaskInfoCommand("run"),
+			"Run dep ensure",
+			pluginapi.TaskInfoCommand("dep"),
 			pluginapi.TaskInfoVerifyOptions(
-				pluginapi.VerifyOptionsApplyTrueArgs("ensure"),
 				pluginapi.VerifyOptionsApplyFalseArgs("--verify"),
 				pluginapi.VerifyOptionsOrdering(intPtr(verifyorder.Format+50)),
 			),
+		),
+		pluginapi.PluginInfoTaskInfo(
+			"run-dep",
+			"Run dep with the provided flags and arguments",
+			pluginapi.TaskInfoCommand("run"),
 		),
 	)
 )
