@@ -17,7 +17,7 @@ var depCmd = &cobra.Command{
 		if verifyFlagVal {
 			return depplugin.Verify()
 		}
-		return depplugin.Run([]string{"ensure"}, cmd.OutOrStdout())
+		return depplugin.Run(append([]string{"ensure"}, args...), cmd.OutOrStdout())
 	},
 }
 
