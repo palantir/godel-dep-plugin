@@ -2,7 +2,7 @@ dep-plugin
 ==========
 `dep-plugin` is a [godel](https://github.com/palantir/godel) plugin for [`dep`](https://github.com/golang/dep). It
 packages the `dep` program and exposes a task that allows the packaged version of `dep` to be run. It also adds a
-`verify` task that runs `dep ensure` when apply is true and `dep ensure -novendor -dry-run` when apply is false to
+`verify` task that runs `dep ensure` when apply is true and `dep ensure -no-vendor -dry-run` when apply is false to
 verify that the state of `dep` in a project is valid.
 
 Tasks
