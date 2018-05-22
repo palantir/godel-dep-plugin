@@ -23,18 +23,18 @@ import (
 // * When used by the solver for dependencies, it first looks for dep config,
 //   then external tools.
 type rootAnalyzer struct {
-	skipTools	bool
-	ctx		*dep.Ctx
-	sm		gps.SourceManager
-	directDeps	map[gps.ProjectRoot]bool
+	skipTools  bool
+	ctx        *dep.Ctx
+	sm         gps.SourceManager
+	directDeps map[gps.ProjectRoot]bool
 }
 
 func newRootAnalyzer(skipTools bool, ctx *dep.Ctx, directDeps map[gps.ProjectRoot]bool, sm gps.SourceManager) *rootAnalyzer {
 	return &rootAnalyzer{
-		skipTools:	skipTools,
-		ctx:		ctx,
-		sm:		sm,
-		directDeps:	directDeps,
+		skipTools:  skipTools,
+		ctx:        ctx,
+		sm:         sm,
+		directDeps: directDeps,
 	}
 }
 
@@ -203,7 +203,7 @@ func (a *rootAnalyzer) FinalizeRootManifestAndLock(m *dep.Manifest, l *dep.Lock,
 // Info provides metadata on the analyzer algorithm used during solve.
 func (a *rootAnalyzer) Info() gps.ProjectAnalyzerInfo {
 	return gps.ProjectAnalyzerInfo{
-		Name:		"dep",
-		Version:	1,
+		Name:    "dep",
+		Version: 1,
 	}
 }

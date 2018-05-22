@@ -18,8 +18,8 @@ import (
 )
 
 var (
-	errProjectNotFound	= fmt.Errorf("could not find project %s, use dep init to initiate a manifest", ManifestName)
-	errVendorBackupFailed	= fmt.Errorf("failed to create vendor backup. File with same name exists")
+	errProjectNotFound    = fmt.Errorf("could not find project %s, use dep init to initiate a manifest", ManifestName)
+	errVendorBackupFailed = fmt.Errorf("failed to create vendor backup. File with same name exists")
 )
 
 // findProjectRoot searches from the starting directory upwards looking for a
@@ -96,15 +96,15 @@ func checkGopkgFilenames(projectRoot string) error {
 // A Project holds a Manifest and optional Lock for a project.
 type Project struct {
 	// AbsRoot is the absolute path to the root directory of the project.
-	AbsRoot	string
+	AbsRoot string
 	// ResolvedAbsRoot is the resolved absolute path to the root directory of the project.
 	// If AbsRoot is not a symlink, then ResolvedAbsRoot should equal AbsRoot.
-	ResolvedAbsRoot	string
+	ResolvedAbsRoot string
 	// ImportRoot is the import path of the project's root directory.
-	ImportRoot	gps.ProjectRoot
-	Manifest	*Manifest
-	Lock		*Lock	// Optional
-	RootPackageTree	pkgtree.PackageTree
+	ImportRoot      gps.ProjectRoot
+	Manifest        *Manifest
+	Lock            *Lock // Optional
+	RootPackageTree pkgtree.PackageTree
 }
 
 // SetRoot sets the project AbsRoot and ResolvedAbsRoot. If root is not a symlink, ResolvedAbsRoot will be set to root.
@@ -122,8 +122,8 @@ func (p *Project) SetRoot(root string) error {
 // any nils incorrectly.
 func (p *Project) MakeParams() gps.SolveParameters {
 	params := gps.SolveParameters{
-		RootDir:		p.AbsRoot,
-		ProjectAnalyzer:	Analyzer{},
+		RootDir:         p.AbsRoot,
+		ProjectAnalyzer: Analyzer{},
 	}
 
 	if p.Manifest != nil {

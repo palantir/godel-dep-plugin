@@ -19,9 +19,9 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/nightlyone/lockfile"
 	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/pkgtree"
 	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/fs"
-	"github.com/nightlyone/lockfile"
 	"github.com/pkg/errors"
 	"github.com/sdboyer/constext"
 )
@@ -142,8 +142,8 @@ type ProjectAnalyzer interface {
 
 // ProjectAnalyzerInfo indicates a ProjectAnalyzer's name and version.
 type ProjectAnalyzerInfo struct {
-	Name	string
-	Version	int
+	Name    string
+	Version int
 }
 
 // String returns a string like: "<name>.<decimal version>"
@@ -156,16 +156,16 @@ func (p ProjectAnalyzerInfo) String() string {
 // There's no (planned) reason why it would need to be reimplemented by other
 // tools; control via dependency injection is intended to be sufficient.
 type SourceMgr struct {
-	cachedir	string			// path to root of cache dir
-	lf		locker			// handle for the sm lock file on disk
-	suprvsr		*supervisor		// subsystem that supervises running calls/io
-	cancelAll	context.CancelFunc	// cancel func to kill all running work
-	deduceCoord	*deductionCoordinator	// subsystem that manages import path deduction
-	srcCoord	*sourceCoordinator	// subsystem that manages sources
-	sigmut		sync.Mutex		// mutex protecting signal handling setup/teardown
-	qch		chan struct{}		// quit chan for signal handler
-	relonce		sync.Once		// once-er to ensure we only release once
-	releasing	int32			// flag indicating release of sm has begun
+	cachedir    string                // path to root of cache dir
+	lf          locker                // handle for the sm lock file on disk
+	suprvsr     *supervisor           // subsystem that supervises running calls/io
+	cancelAll   context.CancelFunc    // cancel func to kill all running work
+	deduceCoord *deductionCoordinator // subsystem that manages import path deduction
+	srcCoord    *sourceCoordinator    // subsystem that manages sources
+	sigmut      sync.Mutex            // mutex protecting signal handling setup/teardown
+	qch         chan struct{}         // quit chan for signal handler
+	relonce     sync.Once             // once-er to ensure we only release once
+	releasing   int32                 // flag indicating release of sm has begun
 }
 
 var _ SourceManager = &SourceMgr{}
@@ -177,9 +177,9 @@ var ErrSourceManagerIsReleased = fmt.Errorf("this SourceManager has been release
 
 // SourceManagerConfig holds configuration information for creating SourceMgrs.
 type SourceManagerConfig struct {
-	Cachedir	string		// Where to store local instances of upstream sources.
-	Logger		*log.Logger	// Optional info/warn logger. Discards if nil.
-	DisableLocking	bool		// True if the SourceManager should NOT use a lock file to protect the Cachedir from multiple processes.
+	Cachedir       string      // Where to store local instances of upstream sources.
+	Logger         *log.Logger // Optional info/warn logger. Discards if nil.
+	DisableLocking bool        // True if the SourceManager should NOT use a lock file to protect the Cachedir from multiple processes.
 }
 
 // NewSourceManager produces an instance of gps's built-in SourceManager.
@@ -221,8 +221,8 @@ func NewSourceManager(c SourceManagerConfig) (*SourceMgr, error) {
 
 	if err != nil {
 		return nil, CouldNotCreateLockError{
-			Path:	glpath,
-			Err:	errors.Wrapf(err, "unable to create lock %s", glpath),
+			Path: glpath,
+			Err:  errors.Wrapf(err, "unable to create lock %s", glpath),
 		}
 	}
 
@@ -232,8 +232,8 @@ func NewSourceManager(c SourceManagerConfig) (*SourceMgr, error) {
 		// check to see if it's us already:
 		if process.Pid == os.Getpid() {
 			return nil, CouldNotCreateLockError{
-				Path:	glpath,
-				Err:	fmt.Errorf("lockfile %s already locked by this process", glpath),
+				Path: glpath,
+				Err:  fmt.Errorf("lockfile %s already locked by this process", glpath),
 			}
 		}
 
@@ -268,8 +268,8 @@ func NewSourceManager(c SourceManagerConfig) (*SourceMgr, error) {
 			time.Sleep(time.Second * 1)
 		} else {
 			return nil, CouldNotCreateLockError{
-				Path:	glpath,
-				Err:	errors.Wrapf(err, "unable to lock %s", glpath),
+				Path: glpath,
+				Err:  errors.Wrapf(err, "unable to lock %s", glpath),
 			}
 		}
 		err = lockfile.TryLock()
@@ -280,13 +280,13 @@ func NewSourceManager(c SourceManagerConfig) (*SourceMgr, error) {
 	deducer := newDeductionCoordinator(superv)
 
 	sm := &SourceMgr{
-		cachedir:	c.Cachedir,
-		lf:		lockfile,
-		suprvsr:	superv,
-		cancelAll:	cf,
-		deduceCoord:	deducer,
-		srcCoord:	newSourceCoordinator(superv, deducer, c.Cachedir, c.Logger),
-		qch:		make(chan struct{}),
+		cachedir:    c.Cachedir,
+		lf:          lockfile,
+		suprvsr:     superv,
+		cancelAll:   cf,
+		deduceCoord: deducer,
+		srcCoord:    newSourceCoordinator(superv, deducer, c.Cachedir, c.Logger),
+		qch:         make(chan struct{}),
 	}
 
 	return sm, nil
@@ -371,8 +371,8 @@ func (sm *SourceMgr) StopSignalHandling() {
 // did not succeed because there was an error while attempting to create the
 // on-disk lock file.
 type CouldNotCreateLockError struct {
-	Path	string
-	Err	error
+	Path string
+	Err  error
 }
 
 func (e CouldNotCreateLockError) Error() string {
@@ -561,7 +561,7 @@ func (sm *SourceMgr) InferConstraint(s string, pi ProjectIdentifier) (Constraint
 	var version PairedVersion
 	versions, err := sm.ListVersions(pi)
 	if err != nil {
-		return nil, errors.Wrapf(err, "list versions for %s", pi)	// means repo does not exist
+		return nil, errors.Wrapf(err, "list versions for %s", pi) // means repo does not exist
 	}
 	SortPairedForUpgrade(versions)
 	for _, v := range versions {
@@ -623,28 +623,28 @@ func (sm *SourceMgr) disambiguateRevision(ctx context.Context, pi ProjectIdentif
 }
 
 type timeCount struct {
-	count	int
-	start	time.Time
+	count int
+	start time.Time
 }
 
 type durCount struct {
-	count	int
-	dur	time.Duration
+	count int
+	dur   time.Duration
 }
 
 type supervisor struct {
-	ctx	context.Context
-	mu	sync.Mutex	// Guards all maps
-	cond	sync.Cond	// Wraps mu so callers can wait until all calls end
-	running	map[callInfo]timeCount
-	ran	map[callType]durCount
+	ctx     context.Context
+	mu      sync.Mutex // Guards all maps
+	cond    sync.Cond  // Wraps mu so callers can wait until all calls end
+	running map[callInfo]timeCount
+	ran     map[callType]durCount
 }
 
 func newSupervisor(ctx context.Context) *supervisor {
 	supv := &supervisor{
-		ctx:		ctx,
-		running:	make(map[callInfo]timeCount),
-		ran:		make(map[callType]durCount),
+		ctx:     ctx,
+		running: make(map[callInfo]timeCount),
+		ran:     make(map[callType]durCount),
 	}
 
 	supv.cond = sync.Cond{L: &supv.mu}
@@ -656,8 +656,8 @@ func newSupervisor(ctx context.Context) *supervisor {
 // calls have returned.
 func (sup *supervisor) do(inctx context.Context, name string, typ callType, f func(context.Context) error) error {
 	ci := callInfo{
-		name:	name,
-		typ:	typ,
+		name: name,
+		typ:  typ,
 	}
 
 	octx, err := sup.start(ci)
@@ -685,8 +685,8 @@ func (sup *supervisor) start(ci callInfo) (context.Context, error) {
 		sup.running[ci] = existingInfo
 	} else {
 		sup.running[ci] = timeCount{
-			count:	1,
-			start:	time.Now(),
+			count: 1,
+			start: time.Now(),
 		}
 	}
 
@@ -742,7 +742,7 @@ func (sup *supervisor) wait() {
 type callType uint
 
 const (
-	ctHTTPMetadata	callType	= iota
+	ctHTTPMetadata callType = iota
 	ctListVersions
 	ctGetManifestAndLock
 	ctListPackages
@@ -778,6 +778,6 @@ func (ct callType) String() string {
 
 // callInfo provides metadata about an ongoing call.
 type callInfo struct {
-	name	string
-	typ	callType
+	name string
+	typ  callType
 }

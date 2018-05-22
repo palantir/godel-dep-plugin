@@ -24,8 +24,8 @@ type traceError interface {
 }
 
 type noVersionError struct {
-	pn	ProjectIdentifier
-	fails	[]failedVersion
+	pn    ProjectIdentifier
+	fails []failedVersion
 }
 
 func (e *noVersionError) Error() string {
@@ -65,14 +65,14 @@ func (e *noVersionError) traceString() string {
 type caseMismatchFailure struct {
 	// goal is the depender atom that tried to introduce the case-varying name,
 	// along with the case-varying name.
-	goal	dependency
+	goal dependency
 	// current is the specific casing of a ProjectRoot that is presently
 	// selected for all possible case variations of its contained unicode code
 	// points.
-	current	ProjectRoot
+	current ProjectRoot
 	// failsib is the list of active dependencies that have determined the
 	// specific casing for the target project.
-	failsib	[]dependency
+	failsib []dependency
 }
 
 func (e *caseMismatchFailure) Error() string {
@@ -111,12 +111,12 @@ func (e *caseMismatchFailure) traceString() string {
 // github.com/sirupsen/logrus, establishing that as the canonical case variant.
 type wrongCaseFailure struct {
 	// correct is the canonical representation of the ProjectRoot
-	correct	ProjectRoot
+	correct ProjectRoot
 	// goal is the incorrectly-referenced target project
-	goal	dependency
+	goal dependency
 	// badcase is the list of active dependencies that have specified an
 	// incorrect ProjectRoot casing for the project in question.
-	badcase	[]dependency
+	badcase []dependency
 }
 
 func (e *wrongCaseFailure) Error() string {
@@ -154,18 +154,18 @@ func (e *wrongCaseFailure) traceString() string {
 type disjointConstraintFailure struct {
 	// goal is the dependency with the problematic constraint, forcing us to
 	// reject the atom that introduces it.
-	goal	dependency
+	goal dependency
 	// failsib is the list of active dependencies that are disjoint with the
 	// goal dependency. This will be at least one, but may not be all of the
 	// active dependencies.
-	failsib	[]dependency
+	failsib []dependency
 	// nofailsib is the list of active dependencies that are NOT disjoint with
 	// the goal dependency. The total of nofailsib and failsib will always be
 	// the total number of active dependencies on target identifier.
-	nofailsib	[]dependency
+	nofailsib []dependency
 	// c is the current constraint on the target identifier. It is intersection
 	// of all the active dependencies' constraints.
-	c	Constraint
+	c Constraint
 }
 
 func (e *disjointConstraintFailure) Error() string {
@@ -225,10 +225,10 @@ func (e *disjointConstraintFailure) traceString() string {
 type constraintNotAllowedFailure struct {
 	// The dependency with the problematic constraint that could not be
 	// introduced.
-	goal	dependency
+	goal dependency
 	// The (currently selected) version of the target project that was not
 	// admissible by the goal dependency.
-	v	Version
+	v Version
 }
 
 func (e *constraintNotAllowedFailure) Error() string {
@@ -257,15 +257,15 @@ func (e *constraintNotAllowedFailure) traceString() string {
 // (This is one of the more straightforward types of failures)
 type versionNotAllowedFailure struct {
 	// goal is the atom that was rejected by current constraints.
-	goal	atom
+	goal atom
 	// failparent is the list of active dependencies that caused the atom to be
 	// rejected. Note that this only includes dependencies that actually
 	// rejected the atom, which will be at least one, but may not be all the
 	// active dependencies on the atom's identifier.
-	failparent	[]dependency
+	failparent []dependency
 	// c is the current constraint on the atom's identifier. This is the intersection
 	// of all active dependencies' constraints.
-	c	Constraint
+	c Constraint
 }
 
 func (e *versionNotAllowedFailure) Error() string {
@@ -301,8 +301,8 @@ func (e *versionNotAllowedFailure) traceString() string {
 }
 
 type missingSourceFailure struct {
-	goal	ProjectIdentifier
-	prob	string
+	goal ProjectIdentifier
+	prob string
 }
 
 func (e *missingSourceFailure) Error() string {
@@ -318,16 +318,16 @@ func (e badOptsFailure) Error() string {
 type sourceMismatchFailure struct {
 	// The ProjectRoot over which there is disagreement about where it should be
 	// sourced from
-	shared	ProjectRoot
+	shared ProjectRoot
 	// The current value for the network source
-	current	string
+	current string
 	// The mismatched value for the network source
-	mismatch	string
+	mismatch string
 	// The currently selected dependencies which have agreed upon/established
 	// the given network source
-	sel	[]dependency
+	sel []dependency
 	// The atom with the constraint that has the new, incompatible network source
-	prob	atom
+	prob atom
 }
 
 func (e *sourceMismatchFailure) Error() string {
@@ -353,8 +353,8 @@ func (e *sourceMismatchFailure) traceString() string {
 }
 
 type errDeppers struct {
-	err	error
-	deppers	[]atom
+	err     error
+	deppers []atom
 }
 
 // checkeeHasProblemPackagesFailure indicates that the goal atom was rejected
@@ -368,10 +368,10 @@ type errDeppers struct {
 // depending on the order in which dependencies were visited.
 type checkeeHasProblemPackagesFailure struct {
 	// goal is the atom that was rejected due to problematic packages.
-	goal	atom
+	goal atom
 	// failpkg is a map of package names to the error describing the problem
 	// with them, plus a list of the selected atoms that require that package.
-	failpkg	map[string]errDeppers
+	failpkg map[string]errDeppers
 }
 
 func (e *checkeeHasProblemPackagesFailure) Error() string {
@@ -461,13 +461,13 @@ type depHasProblemPackagesFailure struct {
 	// selected for the dependency's target id having errors (including, and
 	// probably most commonly,
 	// nonexistence) in one or more packages named by the dependency.
-	goal	dependency
+	goal dependency
 	// v is the version of the currently selected atom targeted by the goal
 	// dependency.
-	v	Version
+	v Version
 	// prob is a map of problem packages to their specific error. It does not
 	// include missing packages.
-	prob	map[string]error
+	prob map[string]error
 }
 
 func (e *depHasProblemPackagesFailure) Error() string {
@@ -549,8 +549,8 @@ func (e *depHasProblemPackagesFailure) traceString() string {
 // for a given project, but that that revision does not exist in the source
 // repository.
 type nonexistentRevisionFailure struct {
-	goal	dependency
-	r	Revision
+	goal dependency
+	r    Revision
 }
 
 func (e *nonexistentRevisionFailure) Error() string {

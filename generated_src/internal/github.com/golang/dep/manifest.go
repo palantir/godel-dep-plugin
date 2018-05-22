@@ -24,82 +24,82 @@ const ManifestName = "Gopkg.toml"
 
 // Errors
 var (
-	errInvalidConstraint	= errors.Errorf("%q must be a TOML array of tables", "constraint")
-	errInvalidOverride	= errors.Errorf("%q must be a TOML array of tables", "override")
-	errInvalidRequired	= errors.Errorf("%q must be a TOML list of strings", "required")
-	errInvalidIgnored	= errors.Errorf("%q must be a TOML list of strings", "ignored")
-	errInvalidPrune		= errors.Errorf("%q must be a TOML table of booleans", "prune")
-	errInvalidPruneProject	= errors.Errorf("%q must be a TOML array of tables", "prune.project")
-	errInvalidMetadata	= errors.New("metadata should be a TOML table")
+	errInvalidConstraint   = errors.Errorf("%q must be a TOML array of tables", "constraint")
+	errInvalidOverride     = errors.Errorf("%q must be a TOML array of tables", "override")
+	errInvalidRequired     = errors.Errorf("%q must be a TOML list of strings", "required")
+	errInvalidIgnored      = errors.Errorf("%q must be a TOML list of strings", "ignored")
+	errInvalidPrune        = errors.Errorf("%q must be a TOML table of booleans", "prune")
+	errInvalidPruneProject = errors.Errorf("%q must be a TOML array of tables", "prune.project")
+	errInvalidMetadata     = errors.New("metadata should be a TOML table")
 
-	errInvalidProjectRoot	= errors.New("ProjectRoot name validation failed")
+	errInvalidProjectRoot = errors.New("ProjectRoot name validation failed")
 
-	errInvalidPruneValue	= errors.New("prune options values must be booleans")
-	errPruneSubProject	= errors.New("prune projects should not contain sub projects")
+	errInvalidPruneValue = errors.New("prune options values must be booleans")
+	errPruneSubProject   = errors.New("prune projects should not contain sub projects")
 
-	errRootPruneContainsName	= errors.Errorf("%q should not include a name", "prune")
-	errInvalidRootPruneValue	= errors.New("root prune options must be omitted instead of being set to false")
-	errInvalidPruneProjectName	= errors.Errorf("%q in %q must be a string", "name", "prune.project")
-	errNoName			= errors.New("no name provided")
+	errRootPruneContainsName   = errors.Errorf("%q should not include a name", "prune")
+	errInvalidRootPruneValue   = errors.New("root prune options must be omitted instead of being set to false")
+	errInvalidPruneProjectName = errors.Errorf("%q in %q must be a string", "name", "prune.project")
+	errNoName                  = errors.New("no name provided")
 )
 
 // Manifest holds manifest file data and implements gps.RootManifest.
 type Manifest struct {
-	Constraints	gps.ProjectConstraints
-	Ovr		gps.ProjectConstraints
+	Constraints gps.ProjectConstraints
+	Ovr         gps.ProjectConstraints
 
-	Ignored		[]string
-	Required	[]string
+	Ignored  []string
+	Required []string
 
-	PruneOptions	gps.CascadingPruneOptions
+	PruneOptions gps.CascadingPruneOptions
 }
 
 type rawManifest struct {
-	Constraints	[]rawProject	`toml:"constraint,omitempty"`
-	Overrides	[]rawProject	`toml:"override,omitempty"`
-	Ignored		[]string	`toml:"ignored,omitempty"`
-	Required	[]string	`toml:"required,omitempty"`
-	PruneOptions	rawPruneOptions	`toml:"prune,omitempty"`
+	Constraints  []rawProject    `toml:"constraint,omitempty"`
+	Overrides    []rawProject    `toml:"override,omitempty"`
+	Ignored      []string        `toml:"ignored,omitempty"`
+	Required     []string        `toml:"required,omitempty"`
+	PruneOptions rawPruneOptions `toml:"prune,omitempty"`
 }
 
 type rawProject struct {
-	Name		string	`toml:"name"`
-	Branch		string	`toml:"branch,omitempty"`
-	Revision	string	`toml:"revision,omitempty"`
-	Version		string	`toml:"version,omitempty"`
-	Source		string	`toml:"source,omitempty"`
+	Name     string `toml:"name"`
+	Branch   string `toml:"branch,omitempty"`
+	Revision string `toml:"revision,omitempty"`
+	Version  string `toml:"version,omitempty"`
+	Source   string `toml:"source,omitempty"`
 }
 
 type rawPruneOptions struct {
-	UnusedPackages	bool	`toml:"unused-packages,omitempty"`
-	NonGoFiles	bool	`toml:"non-go,omitempty"`
-	GoTests		bool	`toml:"go-tests,omitempty"`
+	UnusedPackages bool `toml:"unused-packages,omitempty"`
+	NonGoFiles     bool `toml:"non-go,omitempty"`
+	GoTests        bool `toml:"go-tests,omitempty"`
 
 	//Projects []map[string]interface{} `toml:"project,omitempty"`
-	Projects	[]map[string]interface{}
+	Projects []map[string]interface{}
 }
 
 const (
-	pruneOptionUnusedPackages	= "unused-packages"
-	pruneOptionGoTests		= "go-tests"
-	pruneOptionNonGo		= "non-go"
+	pruneOptionUnusedPackages = "unused-packages"
+	pruneOptionGoTests        = "go-tests"
+	pruneOptionNonGo          = "non-go"
 )
 
 // Constants to represents per-project prune uint8 values.
 const (
-	pvnone	uint8	= 0	// No per-project prune value was set in Gopkg.toml.
-	pvtrue	uint8	= 1	// Per-project prune value was explicitly set to true.
-	pvfalse	uint8	= 2	// Per-project prune value was explicitly set to false.
+	pvnone  uint8 = 0 // No per-project prune value was set in Gopkg.toml.
+	pvtrue  uint8 = 1 // Per-project prune value was explicitly set to true.
+	pvfalse uint8 = 2 // Per-project prune value was explicitly set to false.
 )
 
 // NewManifest instantites a new manifest.
 func NewManifest() *Manifest {
 	return &Manifest{
-		Constraints:	make(gps.ProjectConstraints),
-		Ovr:		make(gps.ProjectConstraints),
+		Constraints: make(gps.ProjectConstraints),
+		Ovr:         make(gps.ProjectConstraints),
 		PruneOptions: gps.CascadingPruneOptions{
-			DefaultOptions:		gps.PruneNestedVendorDirs,
-			PerProjectOptions:	map[gps.ProjectRoot]gps.PruneOptionSet{},
+			DefaultOptions:    gps.PruneNestedVendorDirs,
+			PerProjectOptions: map[gps.ProjectRoot]gps.PruneOptionSet{},
 		},
 	}
 }
@@ -410,8 +410,8 @@ func fromRawManifest(raw rawManifest, buf *bytes.Buffer) (*Manifest, error) {
 
 func fromRawPruneOptions(prunemap map[string]interface{}) gps.CascadingPruneOptions {
 	opts := gps.CascadingPruneOptions{
-		DefaultOptions:		gps.PruneNestedVendorDirs,
-		PerProjectOptions:	make(map[gps.ProjectRoot]gps.PruneOptionSet),
+		DefaultOptions:    gps.PruneNestedVendorDirs,
+		PerProjectOptions: make(map[gps.ProjectRoot]gps.PruneOptionSet),
 	}
 
 	if val, has := prunemap[pruneOptionUnusedPackages]; has && val.(bool) {
@@ -528,10 +528,10 @@ func (m *Manifest) MarshalTOML() ([]byte, error) {
 // toRaw converts the manifest into a representation suitable to write to the manifest file
 func (m *Manifest) toRaw() rawManifest {
 	raw := rawManifest{
-		Constraints:	make([]rawProject, 0, len(m.Constraints)),
-		Overrides:	make([]rawProject, 0, len(m.Ovr)),
-		Ignored:	m.Ignored,
-		Required:	m.Required,
+		Constraints: make([]rawProject, 0, len(m.Constraints)),
+		Overrides:   make([]rawProject, 0, len(m.Ovr)),
+		Ignored:     m.Ignored,
+		Required:    m.Required,
 	}
 
 	for n, prj := range m.Constraints {
@@ -551,8 +551,8 @@ func (m *Manifest) toRaw() rawManifest {
 
 type sortedRawProjects []rawProject
 
-func (s sortedRawProjects) Len() int		{ return len(s) }
-func (s sortedRawProjects) Swap(i, j int)	{ s[i], s[j] = s[j], s[i] }
+func (s sortedRawProjects) Len() int      { return len(s) }
+func (s sortedRawProjects) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 func (s sortedRawProjects) Less(i, j int) bool {
 	l, r := s[i], s[j]
 
@@ -568,8 +568,8 @@ func (s sortedRawProjects) Less(i, j int) bool {
 
 func toRawProject(name gps.ProjectRoot, project gps.ProjectProperties) rawProject {
 	raw := rawProject{
-		Name:	string(name),
-		Source:	project.Source,
+		Name:   string(name),
+		Source: project.Source,
 	}
 
 	if v, ok := project.Constraint.(gps.Version); ok {

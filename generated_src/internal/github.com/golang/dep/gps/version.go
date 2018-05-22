@@ -18,7 +18,7 @@ type VersionType uint8
 
 // VersionTypes for the four major classes of version we deal with
 const (
-	IsRevision	VersionType	= iota
+	IsRevision VersionType = iota
 	IsVersion
 	IsSemver
 	IsBranch
@@ -74,30 +74,30 @@ type UnpairedVersion interface {
 }
 
 // types are weird
-func (branchVersion) _pair(bool)	{}
-func (plainVersion) _pair(bool)		{}
-func (semVersion) _pair(bool)		{}
-func (versionPair) _pair(int)		{}
+func (branchVersion) _pair(bool) {}
+func (plainVersion) _pair(bool)  {}
+func (semVersion) _pair(bool)    {}
+func (versionPair) _pair(int)    {}
 
 // NewBranch creates a new Version to represent a floating version (in
 // general, a branch).
 func NewBranch(body string) UnpairedVersion {
 	return branchVersion{
-		name:	body,
+		name: body,
 		// We always set isDefault to false here, because the property is
 		// specifically designed to be internal-only: only the SourceManager
 		// gets to mark it. This is OK because nothing that client code is
 		// responsible for needs to care about has to touch it it.
 		//
 		// TODO(sdboyer) ...maybe. this just ugly.
-		isDefault:	false,
+		isDefault: false,
 	}
 }
 
 func newDefaultBranch(body string) UnpairedVersion {
 	return branchVersion{
-		name:		body,
-		isDefault:	true,
+		name:      body,
+		isDefault: true,
 	}
 }
 
@@ -208,8 +208,8 @@ func (r Revision) copyTo(msg *pb.Constraint) {
 }
 
 type branchVersion struct {
-	name		string
-	isDefault	bool
+	name      string
+	isDefault bool
 }
 
 func (v branchVersion) String() string {
@@ -286,8 +286,8 @@ func (v branchVersion) Intersect(c Constraint) Constraint {
 
 func (v branchVersion) Pair(r Revision) PairedVersion {
 	return versionPair{
-		v:	v,
-		r:	r,
+		v: v,
+		r: r,
 	}
 }
 
@@ -384,8 +384,8 @@ func (v plainVersion) Intersect(c Constraint) Constraint {
 
 func (v plainVersion) Pair(r Revision) PairedVersion {
 	return versionPair{
-		v:	v,
-		r:	r,
+		v: v,
+		r: r,
 	}
 }
 
@@ -488,8 +488,8 @@ func (v semVersion) Intersect(c Constraint) Constraint {
 
 func (v semVersion) Pair(r Revision) PairedVersion {
 	return versionPair{
-		v:	v,
-		r:	r,
+		v: v,
+		r: r,
 	}
 }
 
@@ -503,12 +503,12 @@ func (v semVersion) identical(c Constraint) bool {
 
 func (v semVersion) copyTo(msg *pb.Constraint) {
 	msg.Type = pb.Constraint_Semver
-	msg.Value = v.String()	//TODO better encoding which doesn't require re-parsing
+	msg.Value = v.String() //TODO better encoding which doesn't require re-parsing
 }
 
 type versionPair struct {
-	v	UnpairedVersion
-	r	Revision
+	v UnpairedVersion
+	r Revision
 }
 
 func (v versionPair) String() string {

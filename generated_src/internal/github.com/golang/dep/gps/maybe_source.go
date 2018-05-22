@@ -127,13 +127,13 @@ type maybeGopkginSource struct {
 	// location to avoid duplicate resource management - e.g., if instances of
 	// a gopkg.in project are accessed via different schemes, or if the
 	// underlying github repository is accessed directly.
-	opath	string
+	opath string
 	// the actual upstream URL - always github
-	url	*url.URL
+	url *url.URL
 	// the major version to apply for filtering
-	major	uint64
+	major uint64
 	// whether or not the source package is "unstable"
-	unstable	bool
+	unstable bool
 }
 
 func (m maybeGopkginSource) try(ctx context.Context, cachedir string, c singleSourceCache, superv *supervisor) (source, sourceState, error) {
@@ -155,9 +155,9 @@ func (m maybeGopkginSource) try(ctx context.Context, cachedir string, c singleSo
 				repo: r,
 			},
 		},
-		major:		m.major,
-		unstable:	m.unstable,
-		aliasURL:	aliasURL,
+		major:    m.major,
+		unstable: m.unstable,
+		aliasURL: aliasURL,
 	}
 
 	var vl []PairedVersion

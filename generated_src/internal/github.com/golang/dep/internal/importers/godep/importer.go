@@ -22,7 +22,7 @@ const godepPath = "Godeps" + string(os.PathSeparator) + "Godeps.json"
 // Importer imports godep configuration into the dep configuration format.
 type Importer struct {
 	*base.Importer
-	json	godepJSON
+	json godepJSON
 }
 
 // NewImporter for godep.
@@ -35,9 +35,9 @@ type godepJSON struct {
 }
 
 type godepPackage struct {
-	ImportPath	string	`json:"ImportPath"`
-	Rev		string	`json:"Rev"`
-	Comment		string	`json:"Comment"`
+	ImportPath string `json:"ImportPath"`
+	Rev        string `json:"Rev"`
+	Comment    string `json:"Comment"`
 }
 
 // Name of the importer.
@@ -105,9 +105,9 @@ func (g *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 		}
 
 		ip := base.ImportedPackage{
-			Name:		pkg.ImportPath,
-			LockHint:	pkg.Rev,
-			ConstraintHint:	pkg.Comment,
+			Name:           pkg.ImportPath,
+			LockHint:       pkg.Rev,
+			ConstraintHint: pkg.Comment,
 		}
 		packages = append(packages, ip)
 	}

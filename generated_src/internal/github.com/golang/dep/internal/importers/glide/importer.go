@@ -26,9 +26,9 @@ const glideLockName = "glide.lock"
 // Importer imports glide configuration into the dep configuration format.
 type Importer struct {
 	*base.Importer
-	glideConfig	glideYaml
-	glideLock	glideLock
-	lockFound	bool
+	glideConfig glideYaml
+	glideLock   glideLock
+	lockFound   bool
 }
 
 // NewImporter for glide.
@@ -37,33 +37,33 @@ func NewImporter(logger *log.Logger, verbose bool, sm gps.SourceManager) *Import
 }
 
 type glideYaml struct {
-	Name		string		`yaml:"package"`
-	Ignores		[]string	`yaml:"ignore"`
-	ExcludeDirs	[]string	`yaml:"excludeDirs"`
-	Imports		[]glidePackage	`yaml:"import"`
-	TestImports	[]glidePackage	`yaml:"testImport"`
+	Name        string         `yaml:"package"`
+	Ignores     []string       `yaml:"ignore"`
+	ExcludeDirs []string       `yaml:"excludeDirs"`
+	Imports     []glidePackage `yaml:"import"`
+	TestImports []glidePackage `yaml:"testImport"`
 }
 
 type glideLock struct {
-	Imports		[]glideLockedPackage	`yaml:"imports"`
-	TestImports	[]glideLockedPackage	`yaml:"testImports"`
+	Imports     []glideLockedPackage `yaml:"imports"`
+	TestImports []glideLockedPackage `yaml:"testImports"`
 }
 
 type glidePackage struct {
-	Name		string	`yaml:"package"`
-	Reference	string	`yaml:"version"`	// could contain a semver, tag or branch
-	Repository	string	`yaml:"repo"`
+	Name       string `yaml:"package"`
+	Reference  string `yaml:"version"` // could contain a semver, tag or branch
+	Repository string `yaml:"repo"`
 
 	// Unsupported fields that we will warn if used
-	Subpackages	[]string	`yaml:"subpackages"`
-	OS		string		`yaml:"os"`
-	Arch		string		`yaml:"arch"`
+	Subpackages []string `yaml:"subpackages"`
+	OS          string   `yaml:"os"`
+	Arch        string   `yaml:"arch"`
 }
 
 type glideLockedPackage struct {
-	Name		string	`yaml:"name"`
-	Revision	string	`yaml:"version"`
-	Repository	string	`yaml:"repo"`
+	Name       string `yaml:"name"`
+	Revision   string `yaml:"version"`
+	Repository string `yaml:"repo"`
 }
 
 // Name of the importer.
@@ -169,9 +169,9 @@ func (g *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 		}
 
 		ip := base.ImportedPackage{
-			Name:		pkg.Name,
-			Source:		pkg.Repository,
-			ConstraintHint:	pkg.Reference,
+			Name:           pkg.Name,
+			Source:         pkg.Repository,
+			ConstraintHint: pkg.Reference,
 		}
 		packages = append(packages, ip)
 	}
@@ -185,9 +185,9 @@ func (g *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 		}
 
 		ip := base.ImportedPackage{
-			Name:		pkg.Name,
-			Source:		pkg.Repository,
-			LockHint:	pkg.Revision,
+			Name:     pkg.Name,
+			Source:   pkg.Repository,
+			LockHint: pkg.Revision,
 		}
 		packages = append(packages, ip)
 	}

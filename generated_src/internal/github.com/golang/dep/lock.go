@@ -20,39 +20,39 @@ const LockName = "Gopkg.lock"
 
 // Lock holds lock file data and implements gps.Lock.
 type Lock struct {
-	SolveMeta	SolveMeta
-	P		[]gps.LockedProject
+	SolveMeta SolveMeta
+	P         []gps.LockedProject
 }
 
 // SolveMeta holds solver meta data.
 type SolveMeta struct {
-	InputsDigest	[]byte
-	AnalyzerName	string
-	AnalyzerVersion	int
-	SolverName	string
-	SolverVersion	int
+	InputsDigest    []byte
+	AnalyzerName    string
+	AnalyzerVersion int
+	SolverName      string
+	SolverVersion   int
 }
 
 type rawLock struct {
-	SolveMeta	solveMeta		`toml:"solve-meta"`
-	Projects	[]rawLockedProject	`toml:"projects"`
+	SolveMeta solveMeta          `toml:"solve-meta"`
+	Projects  []rawLockedProject `toml:"projects"`
 }
 
 type solveMeta struct {
-	InputsDigest	string	`toml:"inputs-digest"`
-	AnalyzerName	string	`toml:"analyzer-name"`
-	AnalyzerVersion	int	`toml:"analyzer-version"`
-	SolverName	string	`toml:"solver-name"`
-	SolverVersion	int	`toml:"solver-version"`
+	InputsDigest    string `toml:"inputs-digest"`
+	AnalyzerName    string `toml:"analyzer-name"`
+	AnalyzerVersion int    `toml:"analyzer-version"`
+	SolverName      string `toml:"solver-name"`
+	SolverVersion   int    `toml:"solver-version"`
 }
 
 type rawLockedProject struct {
-	Name		string		`toml:"name"`
-	Branch		string		`toml:"branch,omitempty"`
-	Revision	string		`toml:"revision"`
-	Version		string		`toml:"version,omitempty"`
-	Source		string		`toml:"source,omitempty"`
-	Packages	[]string	`toml:"packages"`
+	Name     string   `toml:"name"`
+	Branch   string   `toml:"branch,omitempty"`
+	Revision string   `toml:"revision"`
+	Version  string   `toml:"version,omitempty"`
+	Source   string   `toml:"source,omitempty"`
+	Packages []string `toml:"packages"`
 }
 
 func readLock(r io.Reader) (*Lock, error) {
@@ -103,8 +103,8 @@ func fromRawLock(raw rawLock) (*Lock, error) {
 		}
 
 		id := gps.ProjectIdentifier{
-			ProjectRoot:	gps.ProjectRoot(ld.Name),
-			Source:		ld.Source,
+			ProjectRoot: gps.ProjectRoot(ld.Name),
+			Source:      ld.Source,
 		}
 		l.P[i] = gps.NewLockedProject(id, v, ld.Packages)
 	}
@@ -140,13 +140,13 @@ func (l *Lock) HasProjectWithRoot(root gps.ProjectRoot) bool {
 func (l *Lock) toRaw() rawLock {
 	raw := rawLock{
 		SolveMeta: solveMeta{
-			InputsDigest:		hex.EncodeToString(l.SolveMeta.InputsDigest),
-			AnalyzerName:		l.SolveMeta.AnalyzerName,
-			AnalyzerVersion:	l.SolveMeta.AnalyzerVersion,
-			SolverName:		l.SolveMeta.SolverName,
-			SolverVersion:		l.SolveMeta.SolverVersion,
+			InputsDigest:    hex.EncodeToString(l.SolveMeta.InputsDigest),
+			AnalyzerName:    l.SolveMeta.AnalyzerName,
+			AnalyzerVersion: l.SolveMeta.AnalyzerVersion,
+			SolverName:      l.SolveMeta.SolverName,
+			SolverVersion:   l.SolveMeta.SolverVersion,
 		},
-		Projects:	make([]rawLockedProject, len(l.P)),
+		Projects: make([]rawLockedProject, len(l.P)),
 	}
 
 	sort.Slice(l.P, func(i, j int) bool {
@@ -156,9 +156,9 @@ func (l *Lock) toRaw() rawLock {
 	for k, lp := range l.P {
 		id := lp.Ident()
 		ld := rawLockedProject{
-			Name:		string(id.ProjectRoot),
-			Source:		id.Source,
-			Packages:	lp.Packages(),
+			Name:     string(id.ProjectRoot),
+			Source:   id.Source,
+			Packages: lp.Packages(),
 		}
 
 		v := lp.Version()
@@ -188,13 +188,13 @@ func LockFromSolution(in gps.Solution) *Lock {
 
 	l := &Lock{
 		SolveMeta: SolveMeta{
-			InputsDigest:		make([]byte, len(h)),
-			AnalyzerName:		in.AnalyzerName(),
-			AnalyzerVersion:	in.AnalyzerVersion(),
-			SolverName:		in.SolverName(),
-			SolverVersion:		in.SolverVersion(),
+			InputsDigest:    make([]byte, len(h)),
+			AnalyzerName:    in.AnalyzerName(),
+			AnalyzerVersion: in.AnalyzerVersion(),
+			SolverName:      in.SolverName(),
+			SolverVersion:   in.SolverVersion(),
 		},
-		P:	make([]gps.LockedProject, len(p)),
+		P: make([]gps.LockedProject, len(p)),
 	}
 
 	copy(l.SolveMeta.InputsDigest, h)

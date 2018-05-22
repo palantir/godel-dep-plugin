@@ -61,20 +61,20 @@ type singleSourceCache interface {
 }
 
 type singleSourceCacheMemory struct {
-	mut	sync.RWMutex	// protects all fields
-	infos	map[ProjectAnalyzerInfo]map[Revision]projectInfo
-	ptrees	map[Revision]pkgtree.PackageTree
-	vList	[]PairedVersion	// replaced, never modified
-	vMap	map[UnpairedVersion]Revision
-	rMap	map[Revision][]UnpairedVersion
+	mut    sync.RWMutex // protects all fields
+	infos  map[ProjectAnalyzerInfo]map[Revision]projectInfo
+	ptrees map[Revision]pkgtree.PackageTree
+	vList  []PairedVersion // replaced, never modified
+	vMap   map[UnpairedVersion]Revision
+	rMap   map[Revision][]UnpairedVersion
 }
 
 func newMemoryCache() singleSourceCache {
 	return &singleSourceCacheMemory{
-		infos:	make(map[ProjectAnalyzerInfo]map[Revision]projectInfo),
-		ptrees:	make(map[Revision]pkgtree.PackageTree),
-		vMap:	make(map[UnpairedVersion]Revision),
-		rMap:	make(map[Revision][]UnpairedVersion),
+		infos:  make(map[ProjectAnalyzerInfo]map[Revision]projectInfo),
+		ptrees: make(map[Revision]pkgtree.PackageTree),
+		vMap:   make(map[UnpairedVersion]Revision),
+		rMap:   make(map[Revision][]UnpairedVersion),
 	}
 }
 

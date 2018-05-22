@@ -21,11 +21,11 @@ import (
 )
 
 var (
-	gitSchemes	= []string{"https", "ssh", "git", "http"}
-	bzrSchemes	= []string{"https", "bzr+ssh", "bzr", "http"}
-	hgSchemes	= []string{"https", "ssh", "http"}
-	svnSchemes	= []string{"https", "http", "svn", "svn+ssh"}
-	gopkginSchemes	= []string{"https", "http"}
+	gitSchemes     = []string{"https", "ssh", "git", "http"}
+	bzrSchemes     = []string{"https", "bzr+ssh", "bzr", "http"}
+	hgSchemes      = []string{"https", "ssh", "http"}
+	svnSchemes     = []string{"https", "http", "svn", "svn+ssh"}
+	gopkginSchemes = []string{"https", "http"}
 )
 
 const gopkgUnstableSuffix = "-unstable"
@@ -62,24 +62,24 @@ func validateVCSScheme(scheme, typ string) bool {
 var (
 	// This regex allows some usernames that github currently disallows. They
 	// have allowed them in the past.
-	ghRegex		= regexp.MustCompile(`^(?P<root>github\.com(/[A-Za-z0-9][-A-Za-z0-9]*/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
-	gpinNewRegex	= regexp.MustCompile(`^(?P<root>gopkg\.in(?:(/[a-zA-Z0-9][-a-zA-Z0-9]+)?)(/[a-zA-Z][-.a-zA-Z0-9]*)\.((?:v0|v[1-9][0-9]*)(?:\.0|\.[1-9][0-9]*){0,2}(?:-unstable)?)(?:\.git)?)((?:/[a-zA-Z0-9][-.a-zA-Z0-9]*)*)$`)
+	ghRegex      = regexp.MustCompile(`^(?P<root>github\.com(/[A-Za-z0-9][-A-Za-z0-9]*/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
+	gpinNewRegex = regexp.MustCompile(`^(?P<root>gopkg\.in(?:(/[a-zA-Z0-9][-a-zA-Z0-9]+)?)(/[a-zA-Z][-.a-zA-Z0-9]*)\.((?:v0|v[1-9][0-9]*)(?:\.0|\.[1-9][0-9]*){0,2}(?:-unstable)?)(?:\.git)?)((?:/[a-zA-Z0-9][-.a-zA-Z0-9]*)*)$`)
 	//gpinOldRegex = regexp.MustCompile(`^(?P<root>gopkg\.in/(?:([a-z0-9][-a-z0-9]+)/)?((?:v0|v[1-9][0-9]*)(?:\.0|\.[1-9][0-9]*){0,2}(-unstable)?)/([a-zA-Z][-a-zA-Z0-9]*)(?:\.git)?)((?:/[a-zA-Z][-a-zA-Z0-9]*)*)$`)
-	bbRegex	= regexp.MustCompile(`^(?P<root>bitbucket\.org(?P<bitname>/[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
+	bbRegex = regexp.MustCompile(`^(?P<root>bitbucket\.org(?P<bitname>/[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
 	//lpRegex = regexp.MustCompile(`^(?P<root>launchpad\.net/([A-Za-z0-9-._]+)(/[A-Za-z0-9-._]+)?)(/.+)?`)
-	lpRegex	= regexp.MustCompile(`^(?P<root>launchpad\.net(/[A-Za-z0-9-._]+))((?:/[A-Za-z0-9_.\-]+)*)?$`)
+	lpRegex = regexp.MustCompile(`^(?P<root>launchpad\.net(/[A-Za-z0-9-._]+))((?:/[A-Za-z0-9_.\-]+)*)?$`)
 	//glpRegex = regexp.MustCompile(`^(?P<root>git\.launchpad\.net/([A-Za-z0-9_.\-]+)|~[A-Za-z0-9_.\-]+/(\+git|[A-Za-z0-9_.\-]+)/[A-Za-z0-9_.\-]+)$`)
-	glpRegex	= regexp.MustCompile(`^(?P<root>git\.launchpad\.net(/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
+	glpRegex = regexp.MustCompile(`^(?P<root>git\.launchpad\.net(/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
 	//gcRegex      = regexp.MustCompile(`^(?P<root>code\.google\.com/[pr]/(?P<project>[a-z0-9\-]+)(\.(?P<subrepo>[a-z0-9\-]+))?)(/[A-Za-z0-9_.\-]+)*$`)
-	jazzRegex		= regexp.MustCompile(`^(?P<root>hub\.jazz\.net(/git/[a-z0-9]+/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
-	apacheRegex		= regexp.MustCompile(`^(?P<root>git\.apache\.org(/[a-z0-9_.\-]+\.git))((?:/[A-Za-z0-9_.\-]+)*)$`)
-	vcsExtensionRegex	= regexp.MustCompile(`^(?P<root>([a-z0-9.\-]+\.)+[a-z0-9.\-]+(:[0-9]+)?/[A-Za-z0-9_.\-/~]*?\.(?P<vcs>bzr|git|hg|svn))((?:/[A-Za-z0-9_.\-]+)*)$`)
+	jazzRegex         = regexp.MustCompile(`^(?P<root>hub\.jazz\.net(/git/[a-z0-9]+/[A-Za-z0-9_.\-]+))((?:/[A-Za-z0-9_.\-]+)*)$`)
+	apacheRegex       = regexp.MustCompile(`^(?P<root>git\.apache\.org(/[a-z0-9_.\-]+\.git))((?:/[A-Za-z0-9_.\-]+)*)$`)
+	vcsExtensionRegex = regexp.MustCompile(`^(?P<root>([a-z0-9.\-]+\.)+[a-z0-9.\-]+(:[0-9]+)?/[A-Za-z0-9_.\-/~]*?\.(?P<vcs>bzr|git|hg|svn))((?:/[A-Za-z0-9_.\-]+)*)$`)
 )
 
 // Other helper regexes
 var (
-	scpSyntaxRe	= regexp.MustCompile(`^([a-zA-Z0-9_]+)@([a-zA-Z0-9._-]+):(.*)$`)
-	pathvld		= regexp.MustCompile(`^([A-Za-z0-9-]+)(\.[A-Za-z0-9-]+)+(/[A-Za-z0-9-_.~]+)*$`)
+	scpSyntaxRe = regexp.MustCompile(`^([a-zA-Z0-9_]+)@([a-zA-Z0-9._-]+):(.*)$`)
+	pathvld     = regexp.MustCompile(`^([A-Za-z0-9-]+)(\.[A-Za-z0-9-]+)+(/[A-Za-z0-9-_.~]+)*$`)
 )
 
 func pathDeducerTrie() *deducerTrie {
@@ -304,10 +304,10 @@ func (m gopkginDeducer) deduceSource(p string, u *url.URL) (maybeSource, error) 
 		u2 := *u
 		u2.Scheme = scheme
 		mb[k] = maybeGopkginSource{
-			opath:		v[1],
-			url:		&u2,
-			major:		major,
-			unstable:	unstable,
+			opath:    v[1],
+			url:      &u2,
+			major:    major,
+			unstable: unstable,
 		}
 	}
 
@@ -555,17 +555,17 @@ type deducer interface {
 }
 
 type deductionCoordinator struct {
-	suprvsr		*supervisor
-	mut		sync.RWMutex
-	rootxt		*radix.Tree
-	deducext	*deducerTrie
+	suprvsr  *supervisor
+	mut      sync.RWMutex
+	rootxt   *radix.Tree
+	deducext *deducerTrie
 }
 
 func newDeductionCoordinator(superv *supervisor) *deductionCoordinator {
 	dc := &deductionCoordinator{
-		suprvsr:	superv,
-		rootxt:		radix.New(),
-		deducext:	pathDeducerTrie(),
+		suprvsr:  superv,
+		rootxt:   radix.New(),
+		deducext: pathDeducerTrie(),
 	}
 
 	return dc
@@ -624,8 +624,8 @@ func (dc *deductionCoordinator) deduceRootPath(ctx context.Context, path string)
 	// The err indicates no known path matched. It's still possible that
 	// retrieving go get metadata might do the trick.
 	hmd := &httpMetadataDeducer{
-		basePath:	path,
-		suprvsr:	dc.suprvsr,
+		basePath: path,
+		suprvsr:  dc.suprvsr,
 		// The vanity deducer will call this func with a completed
 		// pathDeduction if it succeeds in finding one. We process it
 		// back through the action channel to ensure serialized
@@ -651,8 +651,8 @@ func (dc *deductionCoordinator) deduceRootPath(ctx context.Context, path string)
 // a root path, plus a maybeSource that can be used to attempt to connect to
 // the source.
 type pathDeduction struct {
-	root	string
-	mb	maybeSource
+	root string
+	mb   maybeSource
 }
 
 var errNoKnownPathMatch = errors.New("no known path match")
@@ -675,8 +675,8 @@ func (dc *deductionCoordinator) deduceKnownPaths(path string) (pathDeduction, er
 		}
 
 		return pathDeduction{
-			root:	root,
-			mb:	mb,
+			root: root,
+			mb:   mb,
 		}, nil
 	}
 
@@ -689,8 +689,8 @@ func (dc *deductionCoordinator) deduceKnownPaths(path string) (pathDeduction, er
 		}
 
 		return pathDeduction{
-			root:	root,
-			mb:	mb,
+			root: root,
+			mb:   mb,
 		}, nil
 	}
 
@@ -698,12 +698,12 @@ func (dc *deductionCoordinator) deduceKnownPaths(path string) (pathDeduction, er
 }
 
 type httpMetadataDeducer struct {
-	once		sync.Once
-	deduced		pathDeduction
-	deduceErr	error
-	basePath	string
-	returnFunc	func(pathDeduction)
-	suprvsr		*supervisor
+	once       sync.Once
+	deduced    pathDeduction
+	deduceErr  error
+	basePath   string
+	returnFunc func(pathDeduction)
+	suprvsr    *supervisor
 }
 
 func (hmd *httpMetadataDeducer) deduce(ctx context.Context, path string) (pathDeduction, error) {
@@ -797,10 +797,10 @@ func normalizeURI(p string) (*url.URL, string, error) {
 		// Eg, "git@github.com:user/repo" becomes
 		// "ssh://git@github.com/user/repo".
 		u = &url.URL{
-			Scheme:	"ssh",
-			User:	url.User(m[1]),
-			Host:	m[2],
-			Path:	"/" + m[3],
+			Scheme: "ssh",
+			User:   url.User(m[1]),
+			Host:   m[2],
+			Path:   "/" + m[3],
 			// TODO(sdboyer) This is what stdlib sets; grok why better
 			//RawPath: m[3],
 		}

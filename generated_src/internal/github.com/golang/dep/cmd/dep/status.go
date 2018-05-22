@@ -7,8 +7,8 @@ package amalgomated
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/amalgomated_flag"
 	"fmt"
+	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/amalgomated_flag"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -44,22 +44,22 @@ Status returns exit code zero if all dependencies are in a "good state".
 `
 
 const (
-	shortRev	uint8	= iota
+	shortRev uint8 = iota
 	longRev
 )
 
 var (
-	errFailedUpdate		= errors.New("failed to fetch updates")
-	errFailedListPkg	= errors.New("failed to list packages")
-	errMultipleFailures	= errors.New("multiple sources of failure")
-	errInputDigestMismatch	= errors.New("input-digest mismatch")
+	errFailedUpdate        = errors.New("failed to fetch updates")
+	errFailedListPkg       = errors.New("failed to list packages")
+	errMultipleFailures    = errors.New("multiple sources of failure")
+	errInputDigestMismatch = errors.New("input-digest mismatch")
 )
 
-func (cmd *statusCommand) Name() string		{ return "status" }
-func (cmd *statusCommand) Args() string		{ return "[package...]" }
-func (cmd *statusCommand) ShortHelp() string	{ return statusShortHelp }
-func (cmd *statusCommand) LongHelp() string	{ return statusLongHelp }
-func (cmd *statusCommand) Hidden() bool		{ return false }
+func (cmd *statusCommand) Name() string      { return "status" }
+func (cmd *statusCommand) Args() string      { return "[package...]" }
+func (cmd *statusCommand) ShortHelp() string { return statusShortHelp }
+func (cmd *statusCommand) LongHelp() string  { return statusLongHelp }
+func (cmd *statusCommand) Hidden() bool      { return false }
 
 func (cmd *statusCommand) Register(fs *flag.FlagSet) {
 	fs.BoolVar(&cmd.json, "json", false, "output in JSON format")
@@ -70,12 +70,12 @@ func (cmd *statusCommand) Register(fs *flag.FlagSet) {
 }
 
 type statusCommand struct {
-	json		bool
-	template	string
-	output		string
-	dot		bool
-	old		bool
-	missing		bool
+	json     bool
+	template string
+	output   string
+	dot      bool
+	old      bool
+	missing  bool
 }
 
 type outputter interface {
@@ -130,9 +130,9 @@ func (out *tableOutput) MissingFooter() error {
 }
 
 type jsonOutput struct {
-	w	io.Writer
-	basic	[]*rawStatus
-	missing	[]*MissingStatus
+	w       io.Writer
+	basic   []*rawStatus
+	missing []*MissingStatus
 }
 
 func (out *jsonOutput) BasicHeader() error {
@@ -164,10 +164,10 @@ func (out *jsonOutput) MissingFooter() error {
 }
 
 type dotOutput struct {
-	w	io.Writer
-	o	string
-	g	*graphviz
-	p	*dep.Project
+	w io.Writer
+	o string
+	g *graphviz
+	p *dep.Project
 }
 
 func (out *dotOutput) BasicHeader() error {
@@ -193,24 +193,24 @@ func (out *dotOutput) BasicLine(bs *BasicStatus) error {
 	return nil
 }
 
-func (out *dotOutput) MissingHeader() error			{ return nil }
-func (out *dotOutput) MissingLine(ms *MissingStatus) error	{ return nil }
-func (out *dotOutput) MissingFooter() error			{ return nil }
+func (out *dotOutput) MissingHeader() error                { return nil }
+func (out *dotOutput) MissingLine(ms *MissingStatus) error { return nil }
+func (out *dotOutput) MissingFooter() error                { return nil }
 
 type templateOutput struct {
-	w	io.Writer
-	tmpl	*template.Template
+	w    io.Writer
+	tmpl *template.Template
 }
 
-func (out *templateOutput) BasicHeader() error	{ return nil }
-func (out *templateOutput) BasicFooter() error	{ return nil }
+func (out *templateOutput) BasicHeader() error { return nil }
+func (out *templateOutput) BasicFooter() error { return nil }
 
 func (out *templateOutput) BasicLine(bs *BasicStatus) error {
 	return out.tmpl.Execute(out.w, bs)
 }
 
-func (out *templateOutput) MissingHeader() error	{ return nil }
-func (out *templateOutput) MissingFooter() error	{ return nil }
+func (out *templateOutput) MissingHeader() error { return nil }
+func (out *templateOutput) MissingFooter() error { return nil }
 
 func (out *templateOutput) MissingLine(ms *MissingStatus) error {
 	return out.tmpl.Execute(out.w, ms)
@@ -250,9 +250,9 @@ func (cmd *statusCommand) Run(ctx *dep.Ctx, args []string) error {
 		}
 	case cmd.dot:
 		out = &dotOutput{
-			p:	p,
-			o:	cmd.output,
-			w:	&buf,
+			p: p,
+			o: cmd.output,
+			w: &buf,
 		}
 	case cmd.template != "":
 		tmpl, err := template.New("status").Parse(cmd.template)
@@ -260,8 +260,8 @@ func (cmd *statusCommand) Run(ctx *dep.Ctx, args []string) error {
 			return err
 		}
 		out = &templateOutput{
-			w:	&buf,
-			tmpl:	tmpl,
+			w:    &buf,
+			tmpl: tmpl,
 		}
 	default:
 		out = &tableOutput{
@@ -342,26 +342,26 @@ func (cmd *statusCommand) validateFlags() error {
 }
 
 type rawStatus struct {
-	ProjectRoot	string
-	Constraint	string
-	Version		string
-	Revision	string
-	Latest		string
-	PackageCount	int
+	ProjectRoot  string
+	Constraint   string
+	Version      string
+	Revision     string
+	Latest       string
+	PackageCount int
 }
 
 // BasicStatus contains all the information reported about a single dependency
 // in the summary/list status output mode.
 type BasicStatus struct {
-	ProjectRoot	string
-	Children	[]string
-	Constraint	gps.Constraint
-	Version		gps.UnpairedVersion
-	Revision	gps.Revision
-	Latest		gps.Version
-	PackageCount	int
-	hasOverride	bool
-	hasError	bool
+	ProjectRoot  string
+	Children     []string
+	Constraint   gps.Constraint
+	Version      gps.UnpairedVersion
+	Revision     gps.Revision
+	Latest       gps.Version
+	PackageCount int
+	hasOverride  bool
+	hasError     bool
 }
 
 func (bs *BasicStatus) getConsolidatedConstraint() string {
@@ -409,19 +409,19 @@ func (bs *BasicStatus) getConsolidatedLatest(revSize uint8) string {
 
 func (bs *BasicStatus) marshalJSON() *rawStatus {
 	return &rawStatus{
-		ProjectRoot:	bs.ProjectRoot,
-		Constraint:	bs.getConsolidatedConstraint(),
-		Version:	formatVersion(bs.Version),
-		Revision:	string(bs.Revision),
-		Latest:		bs.getConsolidatedLatest(longRev),
-		PackageCount:	bs.PackageCount,
+		ProjectRoot:  bs.ProjectRoot,
+		Constraint:   bs.getConsolidatedConstraint(),
+		Version:      formatVersion(bs.Version),
+		Revision:     string(bs.Revision),
+		Latest:       bs.getConsolidatedLatest(longRev),
+		PackageCount: bs.PackageCount,
 	}
 }
 
 // MissingStatus contains information about all the missing packages in a project.
 type MissingStatus struct {
-	ProjectRoot	string
-	MissingPackages	[]string
+	ProjectRoot     string
+	MissingPackages []string
 }
 
 func runStatusAll(ctx *dep.Ctx, out outputter, p *dep.Project, sm gps.SourceManager) (hasMissingPkgs bool, errCount int, err error) {
@@ -434,10 +434,10 @@ func runStatusAll(ctx *dep.Ctx, out outputter, p *dep.Project, sm gps.SourceMana
 
 	// Set up a solver in order to check the InputHash.
 	params := gps.SolveParameters{
-		ProjectAnalyzer:	dep.Analyzer{},
-		RootDir:		p.AbsRoot,
-		RootPackageTree:	ptree,
-		Manifest:		p.Manifest,
+		ProjectAnalyzer: dep.Analyzer{},
+		RootDir:         p.AbsRoot,
+		RootPackageTree: ptree,
+		Manifest:        p.Manifest,
 		// Locks aren't a part of the input hash check, so we can omit it.
 	}
 
@@ -498,8 +498,8 @@ func runStatusAll(ctx *dep.Ctx, out outputter, p *dep.Project, sm gps.SourceMana
 
 			go func(proj gps.LockedProject) {
 				bs := BasicStatus{
-					ProjectRoot:	string(proj.Ident().ProjectRoot),
-					PackageCount:	len(proj.Packages()),
+					ProjectRoot:  string(proj.Ident().ProjectRoot),
+					PackageCount: len(proj.Packages()),
 				}
 
 				// Get children only for specific outputers
@@ -665,16 +665,16 @@ func runStatusAll(ctx *dep.Ctx, out outputter, p *dep.Project, sm gps.SourceMana
 	roots := make(map[gps.ProjectRoot][]string, len(external))
 
 	type fail struct {
-		ex	string
-		err	error
+		ex  string
+		err error
 	}
 	var errs []fail
 	for _, e := range external {
 		root, err := sm.DeduceProjectRoot(e)
 		if err != nil {
 			errs = append(errs, fail{
-				ex:	e,
-				err:	err,
+				ex:  e,
+				err: err,
 			})
 			continue
 		}
@@ -741,8 +741,8 @@ func formatVersion(v gps.Version) string {
 
 // projectConstraint stores ProjectRoot and Constraint for that project.
 type projectConstraint struct {
-	Project		gps.ProjectRoot
-	Constraint	gps.Constraint
+	Project    gps.ProjectRoot
+	Constraint gps.Constraint
 }
 
 // constraintsCollection is a map of ProjectRoot(dependency) and a collection of
@@ -839,6 +839,6 @@ func collectConstraints(ctx *dep.Ctx, p *dep.Project, sm gps.SourceManager) (con
 
 type byProject []projectConstraint
 
-func (p byProject) Len() int		{ return len(p) }
-func (p byProject) Swap(i, j int)	{ p[i], p[j] = p[j], p[i] }
-func (p byProject) Less(i, j int) bool	{ return p[i].Project < p[j].Project }
+func (p byProject) Len() int           { return len(p) }
+func (p byProject) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+func (p byProject) Less(i, j int) bool { return p[i].Project < p[j].Project }

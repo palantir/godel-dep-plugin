@@ -95,9 +95,9 @@ func (s *solver) checkAtomAllowable(pa atom) error {
 	}
 
 	err := &versionNotAllowedFailure{
-		goal:		pa,
-		failparent:	failparent,
-		c:		constraint,
+		goal:       pa,
+		failparent: failparent,
+		c:          constraint,
 	}
 
 	return err
@@ -126,8 +126,8 @@ func (s *solver) checkRequiredPackagesExist(a atomWithPackages) error {
 				perr, has := ptree.Packages[pkg]
 				if !has || perr.Err != nil {
 					fp[pkg] = errDeppers{
-						err:		perr.Err,
-						deppers:	[]atom{dep.depender},
+						err:     perr.Err,
+						deppers: []atom{dep.depender},
 					}
 				}
 			}
@@ -136,8 +136,8 @@ func (s *solver) checkRequiredPackagesExist(a atomWithPackages) error {
 
 	if len(fp) > 0 {
 		return &checkeeHasProblemPackagesFailure{
-			goal:		a.a,
-			failpkg:	fp,
+			goal:    a.a,
+			failpkg: fp,
 		}
 	}
 	return nil
@@ -168,10 +168,10 @@ func (s *solver) checkDepsConstraintsAllowable(a atomWithPackages, cdep complete
 	}
 
 	return &disjointConstraintFailure{
-		goal:		dependency{depender: a.a, dep: cdep},
-		failsib:	failsib,
-		nofailsib:	nofailsib,
-		c:		constraint,
+		goal:      dependency{depender: a.a, dep: cdep},
+		failsib:   failsib,
+		nofailsib: nofailsib,
+		c:         constraint,
 	}
 }
 
@@ -185,8 +185,8 @@ func (s *solver) checkDepsDisallowsSelected(a atomWithPackages, cdep completeDep
 		s.fail(dep.Ident)
 
 		return &constraintNotAllowedFailure{
-			goal:	dependency{depender: a.a, dep: cdep},
-			v:	selected.a.v,
+			goal: dependency{depender: a.a, dep: cdep},
+			v:    selected.a.v,
 		}
 	}
 	return nil
@@ -210,11 +210,11 @@ func (s *solver) checkIdentMatches(a atomWithPackages, cdep completeDep) error {
 		}
 
 		return &sourceMismatchFailure{
-			shared:		dep.Ident.ProjectRoot,
-			sel:		deps,
-			current:	curid.normalizedSource(),
-			mismatch:	dep.Ident.normalizedSource(),
-			prob:		a.a,
+			shared:   dep.Ident.ProjectRoot,
+			sel:      deps,
+			current:  curid.normalizedSource(),
+			mismatch: dep.Ident.normalizedSource(),
+			prob:     a.a,
 		}
 	}
 
@@ -259,16 +259,16 @@ func (s *solver) checkRootCaseConflicts(a atomWithPackages, cdep completeDep) er
 	// backjumping directly to the incorrect importers.
 	if current == a.a.id.ProjectRoot {
 		return &wrongCaseFailure{
-			correct:	pr,
-			goal:		dependency{depender: a.a, dep: cdep},
-			badcase:	deps,
+			correct: pr,
+			goal:    dependency{depender: a.a, dep: cdep},
+			badcase: deps,
 		}
 	}
 
 	return &caseMismatchFailure{
-		goal:		dependency{depender: a.a, dep: cdep},
-		current:	current,
-		failsib:	deps,
+		goal:    dependency{depender: a.a, dep: cdep},
+		current: current,
+		failsib: deps,
 	}
 }
 
@@ -289,11 +289,11 @@ func (s *solver) checkPackageImportsFromDepExist(a atomWithPackages, cdep comple
 
 	e := &depHasProblemPackagesFailure{
 		goal: dependency{
-			depender:	a.a,
-			dep:		cdep,
+			depender: a.a,
+			dep:      cdep,
 		},
-		v:	sel.a.v,
-		prob:	make(map[string]error),
+		v:    sel.a.v,
+		prob: make(map[string]error),
 	}
 
 	for _, pkg := range cdep.pl {
@@ -329,9 +329,9 @@ func (s *solver) checkRevisionExists(a atomWithPackages, cdep completeDep) error
 
 	return &nonexistentRevisionFailure{
 		goal: dependency{
-			depender:	a.a,
-			dep:		cdep,
+			depender: a.a,
+			dep:      cdep,
 		},
-		r:	r,
+		r: r,
 	}
 }

@@ -21,7 +21,7 @@ import (
 
 type deducerTrie struct {
 	sync.RWMutex
-	t	*radix.Tree
+	t *radix.Tree
 }
 
 func newDeducerTrie() *deducerTrie {

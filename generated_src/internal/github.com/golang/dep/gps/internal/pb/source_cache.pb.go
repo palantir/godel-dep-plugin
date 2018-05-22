@@ -27,48 +27,48 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2	// please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Constraint_Type int32
 
 const (
-	Constraint_Revision		Constraint_Type	= 0
-	Constraint_Branch		Constraint_Type	= 1
-	Constraint_DefaultBranch	Constraint_Type	= 2
-	Constraint_Version		Constraint_Type	= 3
-	Constraint_Semver		Constraint_Type	= 4
+	Constraint_Revision      Constraint_Type = 0
+	Constraint_Branch        Constraint_Type = 1
+	Constraint_DefaultBranch Constraint_Type = 2
+	Constraint_Version       Constraint_Type = 3
+	Constraint_Semver        Constraint_Type = 4
 )
 
 var Constraint_Type_name = map[int32]string{
-	0:	"Revision",
-	1:	"Branch",
-	2:	"DefaultBranch",
-	3:	"Version",
-	4:	"Semver",
+	0: "Revision",
+	1: "Branch",
+	2: "DefaultBranch",
+	3: "Version",
+	4: "Semver",
 }
 var Constraint_Type_value = map[string]int32{
-	"Revision":		0,
-	"Branch":		1,
-	"DefaultBranch":	2,
-	"Version":		3,
-	"Semver":		4,
+	"Revision":      0,
+	"Branch":        1,
+	"DefaultBranch": 2,
+	"Version":       3,
+	"Semver":        4,
 }
 
 func (x Constraint_Type) String() string {
 	return proto.EnumName(Constraint_Type_name, int32(x))
 }
-func (Constraint_Type) EnumDescriptor() ([]byte, []int)	{ return fileDescriptor0, []int{0, 0} }
+func (Constraint_Type) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0, 0} }
 
 // Constraint is a serializable representation of a gps.Constraint or gps.UnpairedVersion.
 type Constraint struct {
-	Type	Constraint_Type	`protobuf:"varint,1,opt,name=type,enum=pb.Constraint_Type" json:"type,omitempty"`
-	Value	string		`protobuf:"bytes,2,opt,name=value" json:"value,omitempty"`
+	Type  Constraint_Type `protobuf:"varint,1,opt,name=type,enum=pb.Constraint_Type" json:"type,omitempty"`
+	Value string          `protobuf:"bytes,2,opt,name=value" json:"value,omitempty"`
 }
 
-func (m *Constraint) Reset()			{ *m = Constraint{} }
-func (m *Constraint) String() string		{ return proto.CompactTextString(m) }
-func (*Constraint) ProtoMessage()		{}
-func (*Constraint) Descriptor() ([]byte, []int)	{ return fileDescriptor0, []int{0} }
+func (m *Constraint) Reset()                    { *m = Constraint{} }
+func (m *Constraint) String() string            { return proto.CompactTextString(m) }
+func (*Constraint) ProtoMessage()               {}
+func (*Constraint) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 func (m *Constraint) GetType() Constraint_Type {
 	if m != nil {
@@ -86,15 +86,15 @@ func (m *Constraint) GetValue() string {
 
 // ProjectProperties is a serializable representation of gps.ProjectRoot and gps.ProjectProperties.
 type ProjectProperties struct {
-	Root		string		`protobuf:"bytes,1,opt,name=root" json:"root,omitempty"`
-	Source		string		`protobuf:"bytes,2,opt,name=source" json:"source,omitempty"`
-	Constraint	*Constraint	`protobuf:"bytes,3,opt,name=constraint" json:"constraint,omitempty"`
+	Root       string      `protobuf:"bytes,1,opt,name=root" json:"root,omitempty"`
+	Source     string      `protobuf:"bytes,2,opt,name=source" json:"source,omitempty"`
+	Constraint *Constraint `protobuf:"bytes,3,opt,name=constraint" json:"constraint,omitempty"`
 }
 
-func (m *ProjectProperties) Reset()			{ *m = ProjectProperties{} }
-func (m *ProjectProperties) String() string		{ return proto.CompactTextString(m) }
-func (*ProjectProperties) ProtoMessage()		{}
-func (*ProjectProperties) Descriptor() ([]byte, []int)	{ return fileDescriptor0, []int{1} }
+func (m *ProjectProperties) Reset()                    { *m = ProjectProperties{} }
+func (m *ProjectProperties) String() string            { return proto.CompactTextString(m) }
+func (*ProjectProperties) ProtoMessage()               {}
+func (*ProjectProperties) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 func (m *ProjectProperties) GetRoot() string {
 	if m != nil {
@@ -119,17 +119,17 @@ func (m *ProjectProperties) GetConstraint() *Constraint {
 
 // LockedProject is a serializable representation of gps.LockedProject.
 type LockedProject struct {
-	Root		string		`protobuf:"bytes,1,opt,name=root" json:"root,omitempty"`
-	Source		string		`protobuf:"bytes,2,opt,name=source" json:"source,omitempty"`
-	UnpairedVersion	*Constraint	`protobuf:"bytes,3,opt,name=unpairedVersion" json:"unpairedVersion,omitempty"`
-	Revision	string		`protobuf:"bytes,4,opt,name=revision" json:"revision,omitempty"`
-	Packages	[]string	`protobuf:"bytes,5,rep,name=packages" json:"packages,omitempty"`
+	Root            string      `protobuf:"bytes,1,opt,name=root" json:"root,omitempty"`
+	Source          string      `protobuf:"bytes,2,opt,name=source" json:"source,omitempty"`
+	UnpairedVersion *Constraint `protobuf:"bytes,3,opt,name=unpairedVersion" json:"unpairedVersion,omitempty"`
+	Revision        string      `protobuf:"bytes,4,opt,name=revision" json:"revision,omitempty"`
+	Packages        []string    `protobuf:"bytes,5,rep,name=packages" json:"packages,omitempty"`
 }
 
-func (m *LockedProject) Reset()				{ *m = LockedProject{} }
-func (m *LockedProject) String() string			{ return proto.CompactTextString(m) }
-func (*LockedProject) ProtoMessage()			{}
-func (*LockedProject) Descriptor() ([]byte, []int)	{ return fileDescriptor0, []int{2} }
+func (m *LockedProject) Reset()                    { *m = LockedProject{} }
+func (m *LockedProject) String() string            { return proto.CompactTextString(m) }
+func (*LockedProject) ProtoMessage()               {}
+func (*LockedProject) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 func (m *LockedProject) GetRoot() string {
 	if m != nil {
@@ -173,7 +173,7 @@ func init() {
 	proto.RegisterEnum("pb.Constraint_Type", Constraint_Type_name, Constraint_Type_value)
 }
 
-func init()	{ proto.RegisterFile("source_cache.proto", fileDescriptor0) }
+func init() { proto.RegisterFile("source_cache.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 294 bytes of a gzipped FileDescriptorProto

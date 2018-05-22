@@ -24,7 +24,7 @@ func vndrFile(dir string) string {
 // Importer imports vndr configuration into the dep configuration format.
 type Importer struct {
 	*base.Importer
-	packages	[]vndrPackage
+	packages []vndrPackage
 }
 
 // NewImporter for vndr.
@@ -33,7 +33,7 @@ func NewImporter(log *log.Logger, verbose bool, sm gps.SourceManager) *Importer 
 }
 
 // Name of the importer.
-func (v *Importer) Name() string	{ return "vndr" }
+func (v *Importer) Name() string { return "vndr" }
 
 // HasDepMetadata checks if a directory contains config that the importer can handle.
 func (v *Importer) HasDepMetadata(dir string) bool {
@@ -104,9 +104,9 @@ func (v *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 		}
 
 		ip := base.ImportedPackage{
-			Name:		pkg.importPath,
-			Source:		pkg.repository,
-			LockHint:	pkg.reference,
+			Name:     pkg.importPath,
+			Source:   pkg.repository,
+			LockHint: pkg.reference,
 		}
 		packages = append(packages, ip)
 	}
@@ -115,9 +115,9 @@ func (v *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 }
 
 type vndrPackage struct {
-	importPath	string
-	reference	string
-	repository	string
+	importPath string
+	reference  string
+	repository string
 }
 
 func parseVndrLine(line string) (*vndrPackage, error) {
@@ -138,8 +138,8 @@ func parseVndrLine(line string) (*vndrPackage, error) {
 	}
 
 	pkg := &vndrPackage{
-		importPath:	parts[0],
-		reference:	parts[1],
+		importPath: parts[0],
+		reference:  parts[1],
 	}
 	if len(parts) == 3 {
 		pkg.repository = parts[2]
