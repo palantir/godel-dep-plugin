@@ -7,8 +7,8 @@ package amalgomated
 import (
 	"bytes"
 	"context"
-	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/amalgomated_flag"
 	"fmt"
+	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/amalgomated_flag"
 	"go/build"
 	"io/ioutil"
 	"log"
@@ -120,17 +120,17 @@ dep ensure -no-vendor -dry-run
 `
 
 var (
-	errUpdateArgsValidation	= errors.New("update arguments validation failed")
-	errAddDepsFailed	= errors.New("adding dependencies failed")
+	errUpdateArgsValidation = errors.New("update arguments validation failed")
+	errAddDepsFailed        = errors.New("adding dependencies failed")
 )
 
-func (cmd *ensureCommand) Name() string	{ return "ensure" }
+func (cmd *ensureCommand) Name() string { return "ensure" }
 func (cmd *ensureCommand) Args() string {
 	return "[-update | -add] [-no-vendor | -vendor-only] [-dry-run] [-v] [<spec>...]"
 }
-func (cmd *ensureCommand) ShortHelp() string	{ return ensureShortHelp }
-func (cmd *ensureCommand) LongHelp() string	{ return ensureLongHelp }
-func (cmd *ensureCommand) Hidden() bool		{ return false }
+func (cmd *ensureCommand) ShortHelp() string { return ensureShortHelp }
+func (cmd *ensureCommand) LongHelp() string  { return ensureLongHelp }
+func (cmd *ensureCommand) Hidden() bool      { return false }
 
 func (cmd *ensureCommand) Register(fs *flag.FlagSet) {
 	fs.BoolVar(&cmd.examples, "examples", false, "print detailed usage examples")
@@ -142,12 +142,12 @@ func (cmd *ensureCommand) Register(fs *flag.FlagSet) {
 }
 
 type ensureCommand struct {
-	examples	bool
-	update		bool
-	add		bool
-	noVendor	bool
-	vendorOnly	bool
-	dryRun		bool
+	examples   bool
+	update     bool
+	add        bool
+	noVendor   bool
+	vendorOnly bool
+	dryRun     bool
 }
 
 func (cmd *ensureCommand) Run(ctx *dep.Ctx, args []string) error {
@@ -474,7 +474,7 @@ func (cmd *ensureCommand) runAdd(ctx *dep.Ctx, args []string, p *dep.Project, sm
 	const (
 		// Straightforward case - this induces a temporary require, and thus
 		// a warning message about it being ephemeral.
-		isInManifest	addType	= 1 << iota
+		isInManifest addType = 1 << iota
 		// If solving works, we'll pull this constraint from the in-memory
 		// manifest (where we recorded it earlier) and then append it to the
 		// manifest on disk.
@@ -488,10 +488,10 @@ func (cmd *ensureCommand) runAdd(ctx *dep.Ctx, args []string, p *dep.Project, sm
 	)
 
 	type addInstruction struct {
-		id		gps.ProjectIdentifier
-		ephReq		map[string]bool
-		constraint	gps.Constraint
-		typ		addType
+		id         gps.ProjectIdentifier
+		ephReq     map[string]bool
+		constraint gps.Constraint
+		typ        addType
 	}
 	addInstructions := make(map[gps.ProjectRoot]addInstruction)
 
@@ -636,8 +636,8 @@ func (cmd *ensureCommand) runAdd(ctx *dep.Ctx, args []string, p *dep.Project, sm
 		// isInNeither case may or may not have an empty constraint.
 		if instr.typ&(isInNeither|isInImportsWithConstraint) != 0 {
 			p.Manifest.Constraints[pr] = gps.ProjectProperties{
-				Source:		instr.id.Source,
-				Constraint:	instr.constraint,
+				Source:     instr.id.Source,
+				Constraint: instr.constraint,
 			}
 		}
 	}
@@ -749,7 +749,7 @@ func (cmd *ensureCommand) runAdd(ctx *dep.Ctx, args []string, p *dep.Project, sm
 
 func getProjectConstraint(arg string, sm gps.SourceManager) (gps.ProjectConstraint, string, error) {
 	emptyPC := gps.ProjectConstraint{
-		Constraint: gps.Any(),	// default to any; avoids panics later
+		Constraint: gps.Any(), // default to any; avoids panics later
 	}
 
 	// try to split on '@'
@@ -775,7 +775,7 @@ func getProjectConstraint(arg string, sm gps.SourceManager) (gps.ProjectConstrai
 
 	pr, err := sm.DeduceProjectRoot(arg)
 	if err != nil {
-		return emptyPC, "", errors.Wrapf(err, "could not infer project root from dependency path: %s", arg)	// this should go through to the user
+		return emptyPC, "", errors.Wrapf(err, "could not infer project root from dependency path: %s", arg) // this should go through to the user
 	}
 
 	pi := gps.ProjectIdentifier{ProjectRoot: pr, Source: source}
@@ -788,8 +788,8 @@ func getProjectConstraint(arg string, sm gps.SourceManager) (gps.ProjectConstrai
 
 func checkErrors(m map[string]pkgtree.PackageOrErr, ignore *pkgtree.IgnoredRuleset) (fatal bool, err error) {
 	var (
-		noGoErrors	int
-		pkgtreeErrors	= make(pkgtreeErrs, 0, len(m))
+		noGoErrors    int
+		pkgtreeErrors = make(pkgtreeErrs, 0, len(m))
 	)
 
 	for ip, poe := range m {

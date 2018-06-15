@@ -79,9 +79,9 @@ func (m SimpleManifest) DependencyConstraints() ProjectConstraints {
 // simpleRootManifest exists so that we have a safe value to swap into solver
 // params when a nil Manifest is provided.
 type simpleRootManifest struct {
-	c, ovr	ProjectConstraints
-	ig	*pkgtree.IgnoredRuleset
-	req	map[string]bool
+	c, ovr ProjectConstraints
+	ig     *pkgtree.IgnoredRuleset
+	req    map[string]bool
 }
 
 func (m simpleRootManifest) DependencyConstraints() ProjectConstraints {
@@ -98,9 +98,9 @@ func (m simpleRootManifest) RequiredPackages() map[string]bool {
 }
 func (m simpleRootManifest) dup() simpleRootManifest {
 	m2 := simpleRootManifest{
-		c:	make(ProjectConstraints, len(m.c)),
-		ovr:	make(ProjectConstraints, len(m.ovr)),
-		req:	make(map[string]bool, len(m.req)),
+		c:   make(ProjectConstraints, len(m.c)),
+		ovr: make(ProjectConstraints, len(m.ovr)),
+		req: make(map[string]bool, len(m.req)),
 	}
 
 	for k, v := range m.c {

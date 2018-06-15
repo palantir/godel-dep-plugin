@@ -63,9 +63,9 @@ func parseMetaGoImports(r io.Reader) (imports []metaImport, err error) {
 		}
 		if f := strings.Fields(attrValue(e.Attr, "content")); len(f) == 3 {
 			imports = append(imports, metaImport{
-				Prefix:		f[0],
-				VCS:		f[1],
-				RepoRoot:	f[2],
+				Prefix:   f[0],
+				VCS:      f[1],
+				RepoRoot: f[2],
 			})
 		}
 	}

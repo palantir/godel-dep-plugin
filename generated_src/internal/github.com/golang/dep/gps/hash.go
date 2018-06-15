@@ -15,11 +15,11 @@ import (
 
 // string headers used to demarcate sections in hash input creation
 const (
-	hhConstraints	= "-CONSTRAINTS-"
-	hhImportsReqs	= "-IMPORTS/REQS-"
-	hhIgnores	= "-IGNORES-"
-	hhOverrides	= "-OVERRIDES-"
-	hhAnalyzer	= "-ANALYZER-"
+	hhConstraints = "-CONSTRAINTS-"
+	hhImportsReqs = "-IMPORTS/REQS-"
+	hhIgnores     = "-IGNORES-"
+	hhOverrides   = "-OVERRIDES-"
+	hhAnalyzer    = "-ANALYZER-"
 )
 
 // HashInputs computes a hash digest of all data in SolveParams and the

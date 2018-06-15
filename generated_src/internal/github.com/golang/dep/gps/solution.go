@@ -33,19 +33,19 @@ type Solution interface {
 
 type solution struct {
 	// A list of the projects selected by the solver.
-	p	[]LockedProject
+	p []LockedProject
 
 	// The number of solutions that were attempted
-	att	int
+	att int
 
 	// The hash digest of the input opts
-	hd	[]byte
+	hd []byte
 
 	// The analyzer info
-	analyzerInfo	ProjectAnalyzerInfo
+	analyzerInfo ProjectAnalyzerInfo
 
 	// The solver used in producing this solution
-	solv	Solver
+	solv Solver
 }
 
 const concurrentWriters = 16
@@ -72,11 +72,11 @@ func WriteDepTree(basedir string, l Lock, sm SourceManager, co CascadingPruneOpt
 	sem := make(chan struct{}, concurrentWriters)
 	var cnt struct {
 		sync.Mutex
-		i	int
+		i int
 	}
 
 	for i := range lps {
-		p := lps[i]	// per-iteration copy
+		p := lps[i] // per-iteration copy
 
 		g.Go(func() error {
 			err := func() error {

@@ -31,11 +31,11 @@ dep prune will be removed in a future version of dep, causing this command to ex
 type pruneCommand struct {
 }
 
-func (cmd *pruneCommand) Name() string		{ return "prune" }
-func (cmd *pruneCommand) Args() string		{ return "" }
-func (cmd *pruneCommand) ShortHelp() string	{ return pruneShortHelp }
-func (cmd *pruneCommand) LongHelp() string	{ return pruneLongHelp }
-func (cmd *pruneCommand) Hidden() bool		{ return false }
+func (cmd *pruneCommand) Name() string      { return "prune" }
+func (cmd *pruneCommand) Args() string      { return "" }
+func (cmd *pruneCommand) ShortHelp() string { return pruneShortHelp }
+func (cmd *pruneCommand) LongHelp() string  { return pruneLongHelp }
+func (cmd *pruneCommand) Hidden() bool      { return false }
 
 func (cmd *pruneCommand) Register(fs *flag.FlagSet) {
 }
@@ -206,6 +206,6 @@ func deleteDirs(toDelete []string) error {
 
 type byLen []string
 
-func (a byLen) Len() int		{ return len(a) }
-func (a byLen) Swap(i, j int)		{ a[i], a[j] = a[j], a[i] }
-func (a byLen) Less(i, j int) bool	{ return len(a[i]) > len(a[j]) }
+func (a byLen) Len() int           { return len(a) }
+func (a byLen) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a byLen) Less(i, j int) bool { return len(a[i]) > len(a[j]) }

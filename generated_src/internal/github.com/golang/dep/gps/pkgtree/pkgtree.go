@@ -24,20 +24,20 @@ import (
 // Package represents a Go package. It contains a subset of the information
 // go/build.Package does.
 type Package struct {
-	Name		string		// Package name, as declared in the package statement
-	ImportPath	string		// Full import path, including the prefix provided to ListPackages()
-	CommentPath	string		// Import path given in the comment on the package statement
-	Imports		[]string	// Imports from all go and cgo files
-	TestImports	[]string	// Imports from all go test files (in go/build parlance: both TestImports and XTestImports)
+	Name        string   // Package name, as declared in the package statement
+	ImportPath  string   // Full import path, including the prefix provided to ListPackages()
+	CommentPath string   // Import path given in the comment on the package statement
+	Imports     []string // Imports from all go and cgo files
+	TestImports []string // Imports from all go test files (in go/build parlance: both TestImports and XTestImports)
 }
 
 // vcsRoots is a set of directories we should not descend into in ListPackages when
 // searching for Go packages
 var vcsRoots = map[string]struct{}{
-	".git":	{},
-	".bzr":	{},
-	".svn":	{},
-	".hg":	{},
+	".git": {},
+	".bzr": {},
+	".svn": {},
+	".hg":  {},
 }
 
 // ListPackages reports Go package information about all directories in the tree
@@ -64,8 +64,8 @@ var vcsRoots = map[string]struct{}{
 // Package, or an error describing why the directory is not a valid package.
 func ListPackages(fileRoot, importRoot string) (PackageTree, error) {
 	ptree := PackageTree{
-		ImportRoot:	importRoot,
-		Packages:	make(map[string]PackageOrErr),
+		ImportRoot: importRoot,
+		Packages:   make(map[string]PackageOrErr),
 	}
 
 	var err error
@@ -134,8 +134,8 @@ func ListPackages(fileRoot, importRoot string) (PackageTree, error) {
 
 		// Find all the imports, across all os/arch combos
 		p := &build.Package{
-			Dir:		wp,
-			ImportPath:	ip,
+			Dir:        wp,
+			ImportPath: ip,
 		}
 		err = fillPackage(p)
 
@@ -154,18 +154,18 @@ func ListPackages(fileRoot, importRoot string) (PackageTree, error) {
 		}
 
 		pkg := Package{
-			ImportPath:	ip,
-			CommentPath:	p.ImportComment,
-			Name:		p.Name,
-			Imports:	p.Imports,
-			TestImports:	dedupeStrings(p.TestImports, p.XTestImports),
+			ImportPath:  ip,
+			CommentPath: p.ImportComment,
+			Name:        p.Name,
+			Imports:     p.Imports,
+			TestImports: dedupeStrings(p.TestImports, p.XTestImports),
 		}
 
 		if pkg.CommentPath != "" && !strings.HasPrefix(pkg.CommentPath, importRoot) {
 			ptree.Packages[ip] = PackageOrErr{
 				Err: &NonCanonicalImportRoot{
-					ImportRoot:	importRoot,
-					Canonical:	pkg.CommentPath,
+					ImportRoot: importRoot,
+					Canonical:  pkg.CommentPath,
 				},
 			}
 			return nil
@@ -188,9 +188,9 @@ func ListPackages(fileRoot, importRoot string) (PackageTree, error) {
 		if len(lim) > 0 {
 			ptree.Packages[ip] = PackageOrErr{
 				Err: &LocalImportsError{
-					Dir:		wp,
-					ImportPath:	ip,
-					LocalImports:	lim,
+					Dir:          wp,
+					ImportPath:   ip,
+					LocalImports: lim,
 				},
 			}
 		} else {
@@ -256,7 +256,7 @@ func fillPackage(p *build.Package) error {
 			if ic != "" {
 				importComments = append(importComments, ic)
 			}
-			if c.Pos() > pf.Package {	// +build comment must come before package
+			if c.Pos() > pf.Package { // +build comment must come before package
 				continue
 			}
 
@@ -295,7 +295,7 @@ func fillPackage(p *build.Package) error {
 		for _, is := range pf.Imports {
 			name, err := strconv.Unquote(is.Path.Value)
 			if err != nil {
-				return err	// can't happen?
+				return err // can't happen?
 			}
 			if testFile {
 				testImports = append(testImports, name)
@@ -307,8 +307,8 @@ func fillPackage(p *build.Package) error {
 	importComments = uniq(importComments)
 	if len(importComments) > 1 {
 		return &ConflictingImportComments{
-			ImportPath:			p.ImportPath,
-			ConflictingImportComments:	importComments,
+			ImportPath:                p.ImportPath,
+			ConflictingImportComments: importComments,
 		}
 	}
 	if len(importComments) > 0 {
@@ -322,10 +322,10 @@ func fillPackage(p *build.Package) error {
 }
 
 var (
-	slashSlash	= []byte("//")
-	slashStar	= []byte("/*")
-	starSlash	= []byte("*/")
-	importKwd	= []byte("import ")
+	slashSlash = []byte("//")
+	slashStar  = []byte("/*")
+	starSlash  = []byte("*/")
+	importKwd  = []byte("import ")
 )
 
 func findImportComment(pkgName *ast.Ident, c *ast.CommentGroup) string {
@@ -366,8 +366,8 @@ func findImportComment(pkgName *ast.Ident, c *ast.CommentGroup) string {
 // ConflictingImportComments indicates that the package declares more than one
 // different canonical path.
 type ConflictingImportComments struct {
-	ImportPath			string		// An import path referring to this package
-	ConflictingImportComments	[]string	// All distinct "canonical" paths encountered in the package files
+	ImportPath                string   // An import path referring to this package
+	ConflictingImportComments []string // All distinct "canonical" paths encountered in the package files
 }
 
 func (e *ConflictingImportComments) Error() string {
@@ -378,8 +378,8 @@ func (e *ConflictingImportComments) Error() string {
 // NonCanonicalImportRoot reports the situation when the dependee imports a
 // package via something other than the package's declared canonical path.
 type NonCanonicalImportRoot struct {
-	ImportRoot	string	// A root path that is being used to import a package
-	Canonical	string	// A canonical path declared by the package being imported
+	ImportRoot string // A root path that is being used to import a package
+	Canonical  string // A canonical path declared by the package being imported
 }
 
 func (e *NonCanonicalImportRoot) Error() string {
@@ -400,9 +400,9 @@ func quotedPaths(ps []string) string {
 //
 // TODO(sdboyer) add a Files property once we're doing our own per-file parsing
 type LocalImportsError struct {
-	ImportPath	string
-	Dir		string
-	LocalImports	[]string
+	ImportPath   string
+	Dir          string
+	LocalImports []string
 }
 
 func (e *LocalImportsError) Error() string {
@@ -418,16 +418,16 @@ func (e *LocalImportsError) Error() string {
 }
 
 type wm struct {
-	err	error
-	ex	map[string]bool
-	in	map[string]bool
+	err error
+	ex  map[string]bool
+	in  map[string]bool
 }
 
 // PackageOrErr stores the results of attempting to parse a single directory for
 // Go source code.
 type PackageOrErr struct {
-	P	Package
-	Err	error
+	P   Package
+	Err error
 }
 
 // ProblemImportError describes the reason that a particular import path is
@@ -435,14 +435,14 @@ type PackageOrErr struct {
 type ProblemImportError struct {
 	// The import path of the package with some problem rendering it
 	// unimportable.
-	ImportPath	string
+	ImportPath string
 	// The path to the internal package the problem package imports that is the
 	// original cause of this issue. If empty, the package itself is the
 	// problem.
-	Cause	[]string
+	Cause []string
 	// The actual error from ListPackages that is undermining importability for
 	// this package.
-	Err	error
+	Err error
 }
 
 // Error formats the ProblemImportError as a string, reflecting whether the
@@ -468,8 +468,8 @@ func missingPkgErr(pkg string) error {
 // directory identified by each import path - a Package or an error - are stored
 // in the Packages map, keyed by that import path.
 type PackageTree struct {
-	ImportRoot	string
-	Packages	map[string]PackageOrErr
+	ImportRoot string
+	Packages   map[string]PackageOrErr
 }
 
 // ToReachMap looks through a PackageTree and computes the list of external
@@ -578,8 +578,8 @@ func (t PackageTree) ToReachMap(main, tests, backprop bool, ignore *IgnoredRules
 		}
 
 		w := wm{
-			ex:	make(map[string]bool),
-			in:	make(map[string]bool),
+			ex: make(map[string]bool),
+			in: make(map[string]bool),
 		}
 
 		// For each import, decide whether it should be ignored, or if it
@@ -608,8 +608,8 @@ func (t PackageTree) ToReachMap(main, tests, backprop bool, ignore *IgnoredRules
 // mutations.
 func (t PackageTree) Copy() PackageTree {
 	t2 := PackageTree{
-		ImportRoot:	t.ImportRoot,
-		Packages:	make(map[string]PackageOrErr, len(t.Packages)),
+		ImportRoot: t.ImportRoot,
+		Packages:   make(map[string]PackageOrErr, len(t.Packages)),
 	}
 
 	// Walk through and count up the total number of string slice elements we'll
@@ -732,7 +732,7 @@ func wmToReach(workmap map[string]wm, backprop bool) (ReachMap, map[string]*Prob
 	// that's missing.
 
 	const (
-		white	uint8	= iota
+		white uint8 = iota
 		grey
 		black
 	)
@@ -751,8 +751,8 @@ func wmToReach(workmap map[string]wm, backprop bool) (ReachMap, map[string]*Prob
 
 			// Duplicate the err for this package
 			kerr := &ProblemImportError{
-				ImportPath:	ppkg,
-				Err:		err.Err,
+				ImportPath: ppkg,
+				Err:        err.Err,
 			}
 
 			// Shift the slice bounds on the incoming err.Cause.
@@ -821,8 +821,8 @@ func wmToReach(workmap map[string]wm, backprop bool) (ReachMap, map[string]*Prob
 			}
 		}
 		err := &ProblemImportError{
-			Err:	fromErr.Err,
-			Cause:	make([]string, 0, len(path)+len(fromErr.Cause)+1),
+			Err:   fromErr.Err,
+			Cause: make([]string, 0, len(path)+len(fromErr.Cause)+1),
 		}
 		err.Cause = append(err.Cause, path...)
 		err.Cause = append(err.Cause, from)
@@ -864,8 +864,8 @@ func wmToReach(workmap map[string]wm, backprop bool) (ReachMap, map[string]*Prob
 					// Only record something in the errmap if there's actually a
 					// package there, per the semantics of the errmap
 					errmap[pkg] = &ProblemImportError{
-						ImportPath:	pkg,
-						Err:		w.err,
+						ImportPath: pkg,
+						Err:        w.err,
 					}
 				}
 

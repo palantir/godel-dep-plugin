@@ -41,7 +41,7 @@
     "bzip2/internal/sais",
     "internal",
     "internal/errors",
-    "internal/prefix"
+    "internal/prefix",
   ]
   revision = "cc9eb1d7ad760af14e8f918698f745e80377af4f"
 
@@ -70,7 +70,7 @@
     "internal/importers/govend",
     "internal/importers/govendor",
     "internal/importers/gvt",
-    "internal/importers/vndr"
+    "internal/importers/vndr",
   ]
   revision = "37d9ea0ac16f0e0a05afc3b60e1ac8c364b6c329"
   version = "v0.4.1"
@@ -141,7 +141,7 @@
   packages = [
     "dirs",
     "errorstringer",
-    "gofiles"
+    "gofiles",
   ]
   revision = "b64318170fdef93b4462420e0badef8050dbb7ec"
 
@@ -183,11 +183,39 @@
     "framework/verifyorder",
     "godelgetter",
     "pkg/osarch",
-    "pkg/products",
-    "pkg/versionedconfig"
+    "pkg/products/v2/products",
+    "pkg/versionedconfig",
   ]
   revision = "e952ea3e373a433e2a8a8a3cdfb06b0de0b35462"
   version = "v2.0.0-rc10"
+
+[[projects]]
+  name = "github.com/palantir/godel-dep-plugin"
+  packages = [
+    "cmd",
+    "depplugin",
+    "generated_src",
+    "generated_src/internal/github.com/golang/dep",
+    "generated_src/internal/github.com/golang/dep/amalgomated_flag",
+    "generated_src/internal/github.com/golang/dep/cmd/dep",
+    "generated_src/internal/github.com/golang/dep/gps",
+    "generated_src/internal/github.com/golang/dep/gps/internal/pb",
+    "generated_src/internal/github.com/golang/dep/gps/paths",
+    "generated_src/internal/github.com/golang/dep/gps/pkgtree",
+    "generated_src/internal/github.com/golang/dep/internal/feedback",
+    "generated_src/internal/github.com/golang/dep/internal/fs",
+    "generated_src/internal/github.com/golang/dep/internal/importers",
+    "generated_src/internal/github.com/golang/dep/internal/importers/base",
+    "generated_src/internal/github.com/golang/dep/internal/importers/glide",
+    "generated_src/internal/github.com/golang/dep/internal/importers/glock",
+    "generated_src/internal/github.com/golang/dep/internal/importers/godep",
+    "generated_src/internal/github.com/golang/dep/internal/importers/govend",
+    "generated_src/internal/github.com/golang/dep/internal/importers/govendor",
+    "generated_src/internal/github.com/golang/dep/internal/importers/gvt",
+    "generated_src/internal/github.com/golang/dep/internal/importers/vndr",
+  ]
+  revision = "9aa4382ce922740ff858deef23b1a7bf16552b00"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -196,7 +224,7 @@
     "cobracli",
     "matcher",
     "pkgpath",
-    "specdir"
+    "specdir",
   ]
   revision = "23395ebeee5df1083443a6261e5f674a76af91b6"
 
@@ -240,7 +268,7 @@
   name = "github.com/stretchr/testify"
   packages = [
     "assert",
-    "require"
+    "require",
   ]
   revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
   version = "v1.2.1"
@@ -257,7 +285,7 @@
     ".",
     "internal/hash",
     "internal/xlog",
-    "lzma"
+    "lzma",
   ]
   revision = "0c6b41e72360850ca4f98dc341fd999726ea007f"
   version = "v0.5.4"
@@ -295,6 +323,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "36e145d2b280a463357f2310c5269735598abe278f66ee1ccf9c8c1af3561809"
+  inputs-digest = "24919bf216b08a67b113313aedad0285dc3ebde000ef25c5d53053f248e6e4c0"
   solver-name = "gps-cdcl"
   solver-version = 1

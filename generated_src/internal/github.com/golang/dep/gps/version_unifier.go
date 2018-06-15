@@ -8,8 +8,8 @@ import "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/g
 
 // versionUnifier facilitates cross-type version comparison and set operations.
 type versionUnifier struct {
-	b	sourceBridge
-	mtr	*metrics
+	b   sourceBridge
+	mtr *metrics
 }
 
 // pairVersion takes an UnpairedVersion and attempts to pair it with an

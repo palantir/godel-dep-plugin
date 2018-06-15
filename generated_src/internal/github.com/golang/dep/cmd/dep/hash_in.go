@@ -13,13 +13,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (cmd *hashinCommand) Name() string		{ return "hash-inputs" }
-func (cmd *hashinCommand) Args() string		{ return "" }
-func (cmd *hashinCommand) ShortHelp() string	{ return "" }
-func (cmd *hashinCommand) LongHelp() string	{ return "" }
-func (cmd *hashinCommand) Hidden() bool		{ return true }
+func (cmd *hashinCommand) Name() string      { return "hash-inputs" }
+func (cmd *hashinCommand) Args() string      { return "" }
+func (cmd *hashinCommand) ShortHelp() string { return "" }
+func (cmd *hashinCommand) LongHelp() string  { return "" }
+func (cmd *hashinCommand) Hidden() bool      { return true }
 
-func (cmd *hashinCommand) Register(fs *flag.FlagSet)	{}
+func (cmd *hashinCommand) Register(fs *flag.FlagSet) {}
 
 type hashinCommand struct{}
 

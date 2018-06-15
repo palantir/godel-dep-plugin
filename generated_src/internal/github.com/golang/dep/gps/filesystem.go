@@ -14,24 +14,24 @@ import (
 
 // fsLink represents a symbolic link.
 type fsLink struct {
-	path	string
-	to	string
+	path string
+	to   string
 
 	// circular denotes if evaluating the symlink fails with "too many links" error.
 	// This errors means that it's very likely that the symlink has circual refernce.
-	circular	bool
+	circular bool
 
 	// broken denotes that attempting to resolve the link fails, most likely because
 	// the destaination doesn't exist.
-	broken	bool
+	broken bool
 }
 
 // filesystemState represents the state of a file system.
 type filesystemState struct {
-	root	string
-	dirs	[]string
-	files	[]string
-	links	[]fsLink
+	root  string
+	dirs  []string
+	files []string
+	links []fsLink
 }
 
 func (s filesystemState) setup() error {

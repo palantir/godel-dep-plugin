@@ -9,30 +9,30 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
-	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/internal/pb"
-	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/pkgtree"
 	"github.com/golang/protobuf/proto"
 	"github.com/jmank88/nuts"
+	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/internal/pb"
+	"github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/pkgtree"
 	"github.com/pkg/errors"
 )
 
 var (
-	cacheKeyComment		= []byte("c")
-	cacheKeyConstraint	= cacheKeyComment
-	cacheKeyError		= []byte("e")
-	cacheKeyHash		= []byte("h")
-	cacheKeyIgnored		= []byte("i")
-	cacheKeyImport		= cacheKeyIgnored
-	cacheKeyLock		= []byte("l")
-	cacheKeyName		= []byte("n")
-	cacheKeyOverride	= []byte("o")
-	cacheKeyPTree		= []byte("p")
-	cacheKeyRequired	= []byte("r")
-	cacheKeyRevision	= cacheKeyRequired
-	cacheKeyTestImport	= []byte("t")
+	cacheKeyComment    = []byte("c")
+	cacheKeyConstraint = cacheKeyComment
+	cacheKeyError      = []byte("e")
+	cacheKeyHash       = []byte("h")
+	cacheKeyIgnored    = []byte("i")
+	cacheKeyImport     = cacheKeyIgnored
+	cacheKeyLock       = []byte("l")
+	cacheKeyName       = []byte("n")
+	cacheKeyOverride   = []byte("o")
+	cacheKeyPTree      = []byte("p")
+	cacheKeyRequired   = []byte("r")
+	cacheKeyRevision   = cacheKeyRequired
+	cacheKeyTestImport = []byte("t")
 
-	cacheRevision	= byte('r')
-	cacheVersion	= byte('v')
+	cacheRevision = byte('r')
+	cacheVersion  = byte('v')
 )
 
 // propertiesFromCache returns a new ProjectRoot and ProjectProperties with the fields from m.
@@ -56,8 +56,8 @@ func propertiesFromCache(m *pb.ProjectProperties) (ProjectRoot, ProjectPropertie
 
 // projectPropertiesMsgs is a convenience tuple.
 type projectPropertiesMsgs struct {
-	pp	pb.ProjectProperties
-	c	pb.Constraint
+	pp pb.ProjectProperties
+	c  pb.Constraint
 }
 
 // copyFrom sets the ProjectPropertiesMsg fields from ip and pp.
@@ -169,9 +169,9 @@ func cachePutManifest(b *bolt.Bucket, m Manifest) error {
 func cacheGetManifest(b *bolt.Bucket) (RootManifest, error) {
 	//TODO consider storing slice/map lens to enable calling make() with capacity
 	m := &simpleRootManifest{
-		c:	make(ProjectConstraints),
-		ovr:	make(ProjectConstraints),
-		req:	make(map[string]bool),
+		c:   make(ProjectConstraints),
+		ovr: make(ProjectConstraints),
+		req: make(map[string]bool),
 	}
 
 	// Constraints
@@ -265,12 +265,12 @@ func lockedProjectFromCache(m *pb.LockedProject) (LockedProject, error) {
 	}
 	return LockedProject{
 		pi: ProjectIdentifier{
-			ProjectRoot:	ProjectRoot(m.Root),
-			Source:		m.Source,
+			ProjectRoot: ProjectRoot(m.Root),
+			Source:      m.Source,
 		},
-		v:	uv,
-		r:	Revision(m.Revision),
-		pkgs:	m.Packages,
+		v:    uv,
+		r:    Revision(m.Revision),
+		pkgs: m.Packages,
 	}, nil
 }
 

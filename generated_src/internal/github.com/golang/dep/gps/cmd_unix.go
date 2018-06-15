@@ -19,8 +19,8 @@ import (
 
 type cmd struct {
 	// ctx is provided by the caller; SIGINT is sent when it is cancelled.
-	ctx	context.Context
-	Cmd	*exec.Cmd
+	ctx context.Context
+	Cmd *exec.Cmd
 }
 
 func commandContext(ctx context.Context, name string, arg ...string) cmd {
@@ -32,8 +32,8 @@ func commandContext(ctx context.Context, name string, arg ...string) cmd {
 	// group, this allows us to directly manage the issuance of signals to
 	// subprocesses.
 	c.SysProcAttr = &syscall.SysProcAttr{
-		Setpgid:	true,
-		Pgid:		0,
+		Setpgid: true,
+		Pgid:    0,
 	}
 
 	return cmd{ctx: ctx, Cmd: c}

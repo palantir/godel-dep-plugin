@@ -32,8 +32,8 @@ const osPathSeparator = string(filepath.Separator)
 // and produce the same hash, this structure wraps an io.Reader that modifies
 // the file's contents when it is read, translating all CRLF sequences to LF.
 type lineEndingReader struct {
-	src		io.Reader	// source io.Reader from which this reads
-	prevReadEndedCR	bool		// used to track whether final byte of previous Read was CR
+	src             io.Reader // source io.Reader from which this reads
+	prevReadEndedCR bool      // used to track whether final byte of previous Read was CR
 }
 
 // newLineEndingReader returns a new lineEndingReader that reads from the
@@ -68,42 +68,42 @@ func (f *lineEndingReader) Read(buf []byte) (int, error) {
 			// not instantaneous and does require multiple CPU cycles to
 			// complete, but is significantly faster than the application
 			// looping through bytes.
-			copy(buf[1:nr+1], buf[:nr])	// shift data to right one byte
-			buf[0] = '\r'			// insert the previous skipped CR byte at start of buf
-			nr++				// pretend we read one more byte
+			copy(buf[1:nr+1], buf[:nr]) // shift data to right one byte
+			buf[0] = '\r'               // insert the previous skipped CR byte at start of buf
+			nr++                        // pretend we read one more byte
 		}
 
 		// Remove any CRLF sequences in the buffer using `bytes.Index` because,
 		// like the `copy` builtin on many GOARCHs, it also takes advantage of a
 		// machine opcode to search for byte patterns.
-		var searchOffset int	// index within buffer from whence the search will commence for each loop; set to the index of the end of the previous loop.
-		var shiftCount int	// each subsequenct shift operation needs to shift bytes to the left by one more position than the shift that preceded it.
-		previousIndex := -1	// index of previously found CRLF; -1 means no previous index
+		var searchOffset int // index within buffer from whence the search will commence for each loop; set to the index of the end of the previous loop.
+		var shiftCount int   // each subsequenct shift operation needs to shift bytes to the left by one more position than the shift that preceded it.
+		previousIndex := -1  // index of previously found CRLF; -1 means no previous index
 		for {
 			index := bytes.Index(buf[searchOffset:nr], crlf)
 			if index == -1 {
 				break
 			}
-			index += searchOffset	// convert relative index to absolute
+			index += searchOffset // convert relative index to absolute
 			if previousIndex != -1 {
 				// shift substring between previous index and this index
 				copy(buf[previousIndex-shiftCount:], buf[previousIndex+1:index])
-				shiftCount++	// next shift needs to be 1 byte to the left
+				shiftCount++ // next shift needs to be 1 byte to the left
 			}
 			previousIndex = index
-			searchOffset = index + 2	// start next search after len(crlf)
+			searchOffset = index + 2 // start next search after len(crlf)
 		}
 		if previousIndex != -1 {
 			// handle final shift
 			copy(buf[previousIndex-shiftCount:], buf[previousIndex+1:nr])
 			shiftCount++
 		}
-		nr -= shiftCount	// shorten byte read count by number of shifts executed
+		nr -= shiftCount // shorten byte read count by number of shifts executed
 
 		// When final byte from a read operation is CR, do not emit it until
 		// ensure first byte on next read is not LF.
 		if f.prevReadEndedCR = buf[nr-1] == '\r'; f.prevReadEndedCR {
-			nr--	// pretend byte was never read from source
+			nr-- // pretend byte was never read from source
 		}
 	} else if f.prevReadEndedCR {
 		// Reading from source returned nothing, but this struct is sitting on a
@@ -111,7 +111,7 @@ func (f *lineEndingReader) Read(buf []byte) (int, error) {
 		buf[0] = '\r'
 		nr = 1
 		er = nil
-		f.prevReadEndedCR = false	// prevent infinite loop
+		f.prevReadEndedCR = false // prevent infinite loop
 	}
 	return nr, er
 }
@@ -127,10 +127,10 @@ func writeBytesWithNull(h hash.Hash, data []byte) {
 // dirWalkClosure is used to reduce number of allocation involved in closing
 // over these variables.
 type dirWalkClosure struct {
-	someCopyBufer	[]byte	// allocate once and reuse for each file copy
-	someModeBytes	[]byte	// allocate once and reuse for each node
-	someDirLen	int
-	someHash	hash.Hash
+	someCopyBufer []byte // allocate once and reuse for each file copy
+	someModeBytes []byte // allocate once and reuse for each node
+	someDirLen    int
+	someHash      hash.Hash
 }
 
 // DigestFromDirectory returns a hash of the specified directory contents, which
@@ -158,15 +158,15 @@ func DigestFromDirectory(osDirname string) ([]byte, error) {
 	// hash for each node we encounter.
 
 	closure := dirWalkClosure{
-		someCopyBufer:	make([]byte, 4*1024),	// only allocate a single page
-		someModeBytes:	make([]byte, 4),	// scratch place to store encoded os.FileMode (uint32)
-		someDirLen:	len(osDirname) + len(osPathSeparator),
-		someHash:	sha256.New(),
+		someCopyBufer: make([]byte, 4*1024), // only allocate a single page
+		someModeBytes: make([]byte, 4),      // scratch place to store encoded os.FileMode (uint32)
+		someDirLen:    len(osDirname) + len(osPathSeparator),
+		someHash:      sha256.New(),
 	}
 
 	err := DirWalk(osDirname, func(osPathname string, info os.FileInfo, err error) error {
 		if err != nil {
-			return err	// DirWalk received an error during initial Lstat
+			return err // DirWalk received an error during initial Lstat
 		}
 
 		var osRelative string
@@ -193,7 +193,7 @@ func DigestFromDirectory(osDirname string) ([]byte, error) {
 		// permission bits, and sticky bits, which are coincident to bits which
 		// declare type of the file system node.
 		modeType := info.Mode() & os.ModeType
-		var shouldSkip bool	// skip some types of file system nodes
+		var shouldSkip bool // skip some types of file system nodes
 
 		switch {
 		case modeType&os.ModeDir > 0:
@@ -221,20 +221,20 @@ func DigestFromDirectory(osDirname string) ([]byte, error) {
 		// relative pathname is os-agnostic.
 		writeBytesWithNull(closure.someHash, []byte(filepath.ToSlash(osRelative)))
 
-		binary.LittleEndian.PutUint32(closure.someModeBytes, uint32(mt))	// encode the type of mode
-		writeBytesWithNull(closure.someHash, closure.someModeBytes)		// and write to hash
+		binary.LittleEndian.PutUint32(closure.someModeBytes, uint32(mt)) // encode the type of mode
+		writeBytesWithNull(closure.someHash, closure.someModeBytes)      // and write to hash
 
 		if shouldSkip {
-			return nil	// nothing more to do for some of the node types
+			return nil // nothing more to do for some of the node types
 		}
 
-		if mt == os.ModeSymlink {	// okay to check for equivalence because we set to this value
-			osRelative, err = os.Readlink(osPathname)	// read the symlink referent
+		if mt == os.ModeSymlink { // okay to check for equivalence because we set to this value
+			osRelative, err = os.Readlink(osPathname) // read the symlink referent
 			if err != nil {
 				return errors.Wrap(err, "cannot Readlink")
 			}
-			writeBytesWithNull(closure.someHash, []byte(filepath.ToSlash(osRelative)))	// write referent to hash
-			return nil									// proceed to next node in queue
+			writeBytesWithNull(closure.someHash, []byte(filepath.ToSlash(osRelative))) // write referent to hash
+			return nil                                                                 // proceed to next node in queue
 		}
 
 		// If we get here, node is a regular file.
@@ -244,9 +244,9 @@ func DigestFromDirectory(osDirname string) ([]byte, error) {
 		}
 
 		var bytesWritten int64
-		bytesWritten, err = io.CopyBuffer(closure.someHash, newLineEndingReader(fh), closure.someCopyBufer)	// fast copy of file contents to hash
-		err = errors.Wrap(err, "cannot Copy")									// errors.Wrap only wraps non-nil, so skip extra check
-		writeBytesWithNull(closure.someHash, []byte(strconv.FormatInt(bytesWritten, 10)))			// 10: format file size as base 10 integer
+		bytesWritten, err = io.CopyBuffer(closure.someHash, newLineEndingReader(fh), closure.someCopyBufer) // fast copy of file contents to hash
+		err = errors.Wrap(err, "cannot Copy")                                                               // errors.Wrap only wraps non-nil, so skip extra check
+		writeBytesWithNull(closure.someHash, []byte(strconv.FormatInt(bytesWritten, 10)))                   // 10: format file size as base 10 integer
 
 		// Close the file handle to the open file without masking
 		// possible previous error value.
@@ -268,7 +268,7 @@ type VendorStatus uint8
 const (
 	// NotInLock is used when a file system node exists for which there is no
 	// corresponding dependency in the lock file.
-	NotInLock	VendorStatus	= iota
+	NotInLock VendorStatus = iota
 
 	// NotInTree is used when a lock file dependency exists for which there is
 	// no corresponding file system node.
@@ -310,9 +310,9 @@ func (ls VendorStatus) String() string {
 // created for that directory, but not for any of its children. All other file
 // system nodes encountered will result in a fsnode created to represent it.
 type fsnode struct {
-	osRelative		string	// os-specific relative path of a resource under vendor root
-	isRequiredAncestor	bool	// true iff this node or one of its descendants is in the lock file
-	myIndex, parentIndex	int	// index of this node and its parent in the tree's slice
+	osRelative           string // os-specific relative path of a resource under vendor root
+	isRequiredAncestor   bool   // true iff this node or one of its descendants is in the lock file
+	myIndex, parentIndex int    // index of this node and its parent in the tree's slice
 }
 
 // VerifyDepTree verifies a dependency tree according to expected digest sums,
@@ -341,7 +341,7 @@ func VerifyDepTree(osDirname string, wantSums map[string][]byte) (map[string]Ven
 	// name by declaring its relative pathname under the directory name as the
 	// empty string.
 	currentNode := &fsnode{osRelative: "", parentIndex: -1, isRequiredAncestor: true}
-	queue := []*fsnode{currentNode}	// queue of directories that must be inspected
+	queue := []*fsnode{currentNode} // queue of directories that must be inspected
 
 	// In order to identify all file system nodes that are not in the lock file,
 	// represented by the specified expected sums parameter, and in order to
@@ -445,9 +445,9 @@ func VerifyDepTree(osDirname string, wantSums map[string][]byte) (map[string]Ven
 				if err != nil {
 					return nil, errors.Wrap(err, "cannot Stat")
 				}
-				nodes = append(nodes, otherNode)	// Track all file system nodes...
+				nodes = append(nodes, otherNode) // Track all file system nodes...
 				if fi.IsDir() {
-					queue = append(queue, otherNode)	// but only need to add directories to the work queue.
+					queue = append(queue, otherNode) // but only need to add directories to the work queue.
 				}
 			}
 		}

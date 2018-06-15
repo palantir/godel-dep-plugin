@@ -12,21 +12,21 @@ import (
 )
 
 type graphviz struct {
-	ps	[]*gvnode
-	b	bytes.Buffer
-	h	map[string]uint32
+	ps []*gvnode
+	b  bytes.Buffer
+	h  map[string]uint32
 }
 
 type gvnode struct {
-	project		string
-	version		string
-	children	[]string
+	project  string
+	version  string
+	children []string
 }
 
 func (g graphviz) New() *graphviz {
 	ga := &graphviz{
-		ps:	[]*gvnode{},
-		h:	make(map[string]uint32),
+		ps: []*gvnode{},
+		h:  make(map[string]uint32),
 	}
 	return ga
 }
@@ -65,9 +65,9 @@ func (g graphviz) output() bytes.Buffer {
 
 func (g *graphviz) createNode(project, version string, children []string) {
 	pr := &gvnode{
-		project:	project,
-		version:	version,
-		children:	children,
+		project:  project,
+		version:  version,
+		children: children,
 	}
 
 	g.h[pr.project] = pr.hash()

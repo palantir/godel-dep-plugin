@@ -10,25 +10,25 @@ import (
 )
 
 type failedVersion struct {
-	v	Version
-	f	error
+	v Version
+	f error
 }
 
 type versionQueue struct {
-	id		ProjectIdentifier
-	pi		[]Version
-	lockv, prefv	Version
-	fails		[]failedVersion
-	b		sourceBridge
-	failed		bool
-	allLoaded	bool
-	adverr		error
+	id           ProjectIdentifier
+	pi           []Version
+	lockv, prefv Version
+	fails        []failedVersion
+	b            sourceBridge
+	failed       bool
+	allLoaded    bool
+	adverr       error
 }
 
 func newVersionQueue(id ProjectIdentifier, lockv, prefv Version, b sourceBridge) (*versionQueue, error) {
 	vq := &versionQueue{
-		id:	id,
-		b:	b,
+		id: id,
+		b:  b,
 	}
 
 	// Lock goes in first, if present
@@ -70,14 +70,14 @@ func (vq *versionQueue) current() Version {
 // recording the failure that eliminated the current version.
 func (vq *versionQueue) advance(fail error) error {
 	// Nothing in the queue means...nothing in the queue, nicely enough
-	if vq.adverr != nil || len(vq.pi) == 0 {	// should be a redundant check, but just in case
+	if vq.adverr != nil || len(vq.pi) == 0 { // should be a redundant check, but just in case
 		return vq.adverr
 	}
 
 	// Record the fail reason and pop the queue
 	vq.fails = append(vq.fails, failedVersion{
-		v:	vq.pi[0],
-		f:	fail,
+		v: vq.pi[0],
+		f: fail,
 	})
 	vq.pi = vq.pi[1:]
 

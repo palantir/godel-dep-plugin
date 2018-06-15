@@ -24,7 +24,7 @@ const govendYAMLName = "vendor.yml"
 // Importer imports govend configuration in to the dep configuration format.
 type Importer struct {
 	*base.Importer
-	yaml	govendYAML
+	yaml govendYAML
 }
 
 // NewImporter for govend.
@@ -37,8 +37,8 @@ type govendYAML struct {
 }
 
 type govendPackage struct {
-	Path		string	`yaml:"path"`
-	Revision	string	`yaml:"rev"`
+	Path     string `yaml:"path"`
+	Revision string `yaml:"rev"`
 }
 
 // Name of the importer.
@@ -110,8 +110,8 @@ func (g *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 		}
 
 		ip := base.ImportedPackage{
-			Name:		pkg.Path,
-			LockHint:	pkg.Revision,
+			Name:     pkg.Path,
+			LockHint: pkg.Revision,
 		}
 		packages = append(packages, ip)
 	}

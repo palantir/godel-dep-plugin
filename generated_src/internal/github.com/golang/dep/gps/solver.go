@@ -38,14 +38,14 @@ type SolveParameters struct {
 	// is not (currently) required.
 	//
 	// A real path to a readable directory is required.
-	RootDir	string
+	RootDir string
 
 	// The ProjectAnalyzer is responsible for extracting Manifest and
 	// (optionally) Lock information from dependencies. The solver passes it
 	// along to its SourceManager's GetManifestAndLock() method as needed.
 	//
 	// An analyzer is required.
-	ProjectAnalyzer	ProjectAnalyzer
+	ProjectAnalyzer ProjectAnalyzer
 
 	// The tree of packages that comprise the root project, as well as the
 
@@ -55,21 +55,21 @@ type SolveParameters struct {
 	//
 	// The ImportRoot property must be a non-empty string, and at least one
 	// element must be present in the Packages map.
-	RootPackageTree	pkgtree.PackageTree
+	RootPackageTree pkgtree.PackageTree
 
 	// The root manifest. This contains all the dependency constraints
 	// associated with normal Manifests, as well as the particular controls
 	// afforded only to the root project.
 	//
 	// May be nil, but for most cases, that would be unwise.
-	Manifest	RootManifest
+	Manifest RootManifest
 
 	// The root lock. Optional. Generally, this lock is the output of a previous
 	// solve run.
 	//
 	// If provided, the solver will attempt to preserve the versions specified
 	// in the lock, unless ToChange or ChangeAll settings indicate otherwise.
-	Lock	Lock
+	Lock Lock
 
 	// ToChange is a list of project names that should be changed - that is, any
 	// versions specified for those projects in the root lock file should be
@@ -78,11 +78,11 @@ type SolveParameters struct {
 	// Passing ChangeAll has subtly different behavior from enumerating all
 	// projects into ToChange. In general, ToChange should *only* be used if the
 	// user expressly requested an upgrade for a specific project.
-	ToChange	[]ProjectRoot
+	ToChange []ProjectRoot
 
 	// ChangeAll indicates that all projects should be changed - that is, any
 	// versions specified in the root lock file should be ignored.
-	ChangeAll	bool
+	ChangeAll bool
 
 	// Downgrade indicates whether the solver will attempt to upgrade (false) or
 	// downgrade (true) projects that are not locked, or are marked for change.
@@ -90,21 +90,21 @@ type SolveParameters struct {
 	// Upgrading is, by far, the most typical case. The field is named
 	// 'Downgrade' so that the bool's zero value corresponds to that most
 	// typical case.
-	Downgrade	bool
+	Downgrade bool
 
 	// TraceLogger is the logger to use for generating trace output. If set, the
 	// solver will generate informative trace output as it moves through the
 	// solving process.
-	TraceLogger	*log.Logger
+	TraceLogger *log.Logger
 
 	// stdLibFn is the function to use to recognize standard library import paths.
 	// Only overridden for tests. Defaults to paths.IsStandardImportPath if nil.
-	stdLibFn	func(string) bool
+	stdLibFn func(string) bool
 
 	// mkBridgeFn is the function to use to create sourceBridges.
 	// Only overridden for tests (so we can run with virtual RootDir).
 	// Defaults to mkBridge if nil.
-	mkBridgeFn	func(*solver, SourceManager, bool) sourceBridge
+	mkBridgeFn func(*solver, SourceManager, bool) sourceBridge
 }
 
 // solver is a CDCL-style constraint solver with satisfiability conditions
@@ -113,23 +113,23 @@ type solver struct {
 	// The current number of attempts made over the course of this solve. This
 	// number increments each time the algorithm completes a backtrack and
 	// starts moving forward again.
-	attempts	int
+	attempts int
 
 	// Logger used exclusively for trace output, or nil to suppress.
-	tl	*log.Logger
+	tl *log.Logger
 
 	// The function to use to recognize standard library import paths.
-	stdLibFn	func(string) bool
+	stdLibFn func(string) bool
 
 	// A bridge to the standard SourceManager. The adapter does some local
 	// caching of pre-sorted version lists, as well as translation between the
 	// full-on ProjectIdentifiers that the solver deals with and the simplified
 	// names a SourceManager operates on.
-	b	sourceBridge
+	b sourceBridge
 
 	// A versionUnifier, to facilitate cross-type version comparison and set
 	// operations.
-	vUnify	*versionUnifier
+	vUnify *versionUnifier
 
 	// A stack containing projects and packages that are currently "selected" -
 	// that is, they have passed all satisfiability checks, and are part of the
@@ -137,7 +137,7 @@ type solver struct {
 	//
 	// The *selection type is mostly just a dumb data container; the solver
 	// itself is responsible for maintaining that invariant.
-	sel	*selection
+	sel *selection
 
 	// The current list of projects that we need to incorporate into the solution in
 	// order for the solution to be complete. This list is implemented as a
@@ -148,7 +148,7 @@ type solver struct {
 	// Entries are added to and removed from this list by the solver at the same
 	// time that the selected queue is updated, either with an addition or
 	// removal.
-	unsel	*unselected
+	unsel *unselected
 
 	// A stack of all the currently active versionQueues in the solver. The set
 	// of projects represented here corresponds closely to what's in s.sel,
@@ -156,17 +156,17 @@ type solver struct {
 	// will. Also, s.vqs is only added to (or popped from during backtracking)
 	// when a new project is selected; it is untouched when new packages are
 	// added to an existing project.
-	vqs	[]*versionQueue
+	vqs []*versionQueue
 
 	// Contains data and constraining information from the root project
-	rd	rootdata
+	rd rootdata
 
 	// metrics for the current solve run.
-	mtr	*metrics
+	mtr *metrics
 
 	// Indicates whether the solver has been run. It is invalid to run this type
 	// of solver more than once.
-	hasrun	int32
+	hasrun int32
 }
 
 func (params SolveParameters) toRootdata() (rootdata, error) {
@@ -191,15 +191,15 @@ func (params SolveParameters) toRootdata() (rootdata, error) {
 	}
 
 	rd := rootdata{
-		ir:		params.Manifest.IgnoredPackages(),
-		req:		params.Manifest.RequiredPackages(),
-		ovr:		params.Manifest.Overrides(),
-		rpt:		params.RootPackageTree.Copy(),
-		chng:		make(map[ProjectRoot]struct{}),
-		rlm:		make(map[ProjectRoot]LockedProject),
-		chngall:	params.ChangeAll,
-		dir:		params.RootDir,
-		an:		params.ProjectAnalyzer,
+		ir:      params.Manifest.IgnoredPackages(),
+		req:     params.Manifest.RequiredPackages(),
+		ovr:     params.Manifest.Overrides(),
+		rpt:     params.RootPackageTree.Copy(),
+		chng:    make(map[ProjectRoot]struct{}),
+		rlm:     make(map[ProjectRoot]LockedProject),
+		chngall: params.ChangeAll,
+		dir:     params.RootDir,
+		an:      params.ProjectAnalyzer,
 	}
 
 	// Ensure the required and overrides maps are at least initialized
@@ -289,9 +289,9 @@ func Prepare(params SolveParameters, sm SourceManager) (Solver, error) {
 	}
 
 	s := &solver{
-		tl:		params.TraceLogger,
-		stdLibFn:	params.stdLibFn,
-		rd:		rd,
+		tl:       params.TraceLogger,
+		stdLibFn: params.stdLibFn,
+		rd:       rd,
 	}
 
 	// Set up the bridge and ensure the root dir is in good, working order
@@ -311,13 +311,13 @@ func Prepare(params SolveParameters, sm SourceManager) (Solver, error) {
 
 	// Initialize stacks and queues
 	s.sel = &selection{
-		deps:		make(map[ProjectRoot][]dependency),
-		foldRoots:	make(map[string]ProjectRoot),
-		vu:		s.vUnify,
+		deps:      make(map[ProjectRoot][]dependency),
+		foldRoots: make(map[string]ProjectRoot),
+		vu:        s.vUnify,
 	}
 	s.unsel = &unselected{
-		sl:	make([]bimodalIdentifier, 0),
-		cmp:	s.unselectedComparator,
+		sl:  make([]bimodalIdentifier, 0),
+		cmp: s.unselectedComparator,
 	}
 
 	return s, nil
@@ -460,8 +460,8 @@ func (s *solver) Solve(ctx context.Context) (Solution, error) {
 	var soln solution
 	if err == nil {
 		soln = solution{
-			att:	s.attempts,
-			solv:	s,
+			att:  s.attempts,
+			solv: s,
 		}
 		soln.analyzerInfo = s.rd.an.Info()
 		soln.hd = s.HashInputs()
@@ -535,10 +535,10 @@ func (s *solver) solve(ctx context.Context) (map[atom]map[string]struct{}, error
 
 			awp := atomWithPackages{
 				a: atom{
-					id:	queue.id,
-					v:	queue.current(),
+					id: queue.id,
+					v:  queue.current(),
 				},
-				pl:	bmi.pl,
+				pl: bmi.pl,
 			}
 			err = s.selectAtom(awp, false)
 			s.mtr.pop()
@@ -563,10 +563,10 @@ func (s *solver) solve(ctx context.Context) (map[atom]map[string]struct{}, error
 			// s.sel.selected().
 			nawp := atomWithPackages{
 				a: atom{
-					id:	bmi.id,
-					v:	awp.a.v,
+					id: bmi.id,
+					v:  awp.a.v,
 				},
-				pl:	bmi.pl,
+				pl: bmi.pl,
 			}
 
 			s.traceCheckPkgs(bmi)
@@ -765,8 +765,8 @@ func (s *solver) intersectConstraintsWithImports(deps []workingConstraint, reach
 				dmap[dep.Ident.ProjectRoot] = cdep
 			} else {
 				dmap[dep.Ident.ProjectRoot] = completeDep{
-					workingConstraint:	dep,
-					pl:			[]string{rp},
+					workingConstraint: dep,
+					pl:                []string{rp},
 				}
 			}
 			continue
@@ -787,8 +787,8 @@ func (s *solver) intersectConstraintsWithImports(deps []workingConstraint, reach
 		xt.Insert(string(root), pd)
 		// And also put the complete dep into the dmap
 		dmap[root] = completeDep{
-			workingConstraint:	pd,
-			pl:			[]string{rp},
+			workingConstraint: pd,
+			pl:                []string{rp},
 		}
 	}
 
@@ -934,10 +934,10 @@ func (s *solver) findValidVersion(q *versionQueue, pl []string) error {
 		s.traceInfo("try %s@%s", q.id, cur)
 		err := s.check(atomWithPackages{
 			a: atom{
-				id:	q.id,
-				v:	cur,
+				id: q.id,
+				v:  cur,
 			},
-			pl:	pl,
+			pl: pl,
 		}, false)
 		if err == nil {
 			// we have a good version, can return safely
@@ -959,8 +959,8 @@ func (s *solver) findValidVersion(q *versionQueue, pl []string) error {
 	// Return a compound error of all the new errors encountered during this
 	// attempt to find a new, valid version
 	return &noVersionError{
-		pn:	q.id,
-		fails:	q.fails[faillen:],
+		pn:    q.id,
+		fails: q.fails[faillen:],
 	}
 }
 
@@ -993,8 +993,8 @@ func (s *solver) getLockVersionIfValid(id ProjectIdentifier) (Version, error) {
 		// information to complete a solution. In that case, error out.
 		if explicit {
 			return nil, &missingSourceFailure{
-				goal:	id,
-				prob:	"Cannot upgrade %s, as no source repository could be found.",
+				goal: id,
+				prob: "Cannot upgrade %s, as no source repository could be found.",
 			}
 		}
 	}
@@ -1250,8 +1250,8 @@ func (s *solver) fail(id ProjectIdentifier) {
 func (s *solver) selectAtom(a atomWithPackages, pkgonly bool) error {
 	s.mtr.push("select-atom")
 	s.unsel.remove(bimodalIdentifier{
-		id:	a.a.id,
-		pl:	a.pl,
+		id: a.a.id,
+		pl: a.pl,
 	})
 
 	pl, deps, err := s.getImportsAndConstraintsOf(a)
@@ -1330,11 +1330,11 @@ func (s *solver) selectAtom(a atomWithPackages, pkgonly bool) error {
 			// alternate source, and one without. See #969.
 			id, _ := s.sel.getIdentFor(dep.Ident.ProjectRoot)
 			bmi := bimodalIdentifier{
-				id:	id,
-				pl:	newp,
+				id: id,
+				pl: newp,
 				// This puts in a preferred version if one's in the map, else
 				// drops in the zero value (nil)
-				prefv:	lmap[dep.Ident],
+				prefv: lmap[dep.Ident],
 			}
 			heap.Push(s.unsel, bmi)
 		}

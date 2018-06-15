@@ -24,7 +24,7 @@ const glockfile = "GLOCKFILE"
 type Importer struct {
 	*base.Importer
 
-	packages	[]glockPackage
+	packages []glockPackage
 }
 
 // NewImporter for glock.
@@ -59,8 +59,8 @@ func (g *Importer) Import(dir string, pr gps.ProjectRoot) (*dep.Manifest, *dep.L
 }
 
 type glockPackage struct {
-	importPath	string
-	revision	string
+	importPath string
+	revision   string
 }
 
 func (g *Importer) load(projectDir string) error {
@@ -99,8 +99,8 @@ func (g *Importer) load(projectDir string) error {
 func parseGlockLine(line string) (*glockPackage, error) {
 	fields := strings.Fields(line)
 	switch len(fields) {
-	case 2:	// Valid.
-	case 0:	// Skip empty lines.
+	case 2: // Valid.
+	case 0: // Skip empty lines.
 		return nil, nil
 	default:
 		return nil, fmt.Errorf("invalid glock configuration: %s", line)
@@ -111,8 +111,8 @@ func parseGlockLine(line string) (*glockPackage, error) {
 		return nil, nil
 	}
 	return &glockPackage{
-		importPath:	fields[0],
-		revision:	fields[1],
+		importPath: fields[0],
+		revision:   fields[1],
 	}, nil
 }
 
@@ -140,8 +140,8 @@ func (g *Importer) convert(pr gps.ProjectRoot) (*dep.Manifest, *dep.Lock) {
 		}
 
 		packages = append(packages, base.ImportedPackage{
-			Name:		pkg.importPath,
-			LockHint:	pkg.revision,
+			Name:     pkg.importPath,
+			LockHint: pkg.revision,
 		})
 	}
 

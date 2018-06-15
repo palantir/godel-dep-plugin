@@ -76,8 +76,8 @@ type ProjectRoot string
 // If Source is not explicitly set, gps will derive the network address from
 // the ImportRoot using a similar algorithm to that utilized by `go get`.
 type ProjectIdentifier struct {
-	ProjectRoot	ProjectRoot
-	Source		string
+	ProjectRoot ProjectRoot
+	Source      string
 }
 
 // Less compares by ProjectRoot then normalized Source.
@@ -163,25 +163,25 @@ func (i ProjectIdentifier) normalize() ProjectIdentifier {
 // ProjectProperties; they make little sense without their corresponding
 // ProjectRoot.
 type ProjectProperties struct {
-	Source		string
-	Constraint	Constraint
+	Source     string
+	Constraint Constraint
 }
 
 // bimodalIdentifiers are used to track work to be done in the unselected queue.
 type bimodalIdentifier struct {
-	id	ProjectIdentifier
+	id ProjectIdentifier
 	// List of packages required within/under the ProjectIdentifier
-	pl	[]string
+	pl []string
 	// prefv is used to indicate a 'preferred' version. This is expected to be
 	// derived from a dep's lock data, or else is empty.
-	prefv	Version
+	prefv Version
 	// Indicates that the bmi came from the root project originally
-	fromRoot	bool
+	fromRoot bool
 }
 
 type atom struct {
-	id	ProjectIdentifier
-	v	Version
+	id ProjectIdentifier
+	v  Version
 }
 
 // With a random revision and no name, collisions are...unlikely
@@ -190,8 +190,8 @@ var nilpa = atom{
 }
 
 type atomWithPackages struct {
-	a	atom
-	pl	[]string
+	a  atom
+	pl []string
 }
 
 // bmi converts an atomWithPackages into a bimodalIdentifier.
@@ -201,8 +201,8 @@ type atomWithPackages struct {
 // lest that backpropagate and cause inconsistencies.
 func (awp atomWithPackages) bmi() bimodalIdentifier {
 	return bimodalIdentifier{
-		id:	awp.a.id,
-		pl:	awp.pl,
+		id: awp.a.id,
+		pl: awp.pl,
 	}
 }
 
@@ -214,13 +214,13 @@ type completeDep struct {
 	// The base workingConstraint
 	workingConstraint
 	// The specific packages required from the ProjectDep
-	pl	[]string
+	pl []string
 }
 
 // dependency represents an incomplete edge in the depgraph. It has a
 // fully-realized atom as the depender (the tail/source of the edge), and a set
 // of requirements that any atom to be attached at the head/target must satisfy.
 type dependency struct {
-	depender	atom
-	dep		completeDep
+	depender atom
+	dep      completeDep
 }

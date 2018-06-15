@@ -14,18 +14,18 @@ import (
 )
 
 type metrics struct {
-	stack	[]string
-	times	map[string]time.Duration
-	last	time.Time
+	stack []string
+	times map[string]time.Duration
+	last  time.Time
 }
 
 func newMetrics() *metrics {
 	return &metrics{
-		stack:	[]string{"other"},
+		stack: []string{"other"},
 		times: map[string]time.Duration{
 			"other": 0,
 		},
-		last:	time.Now(),
+		last: time.Now(),
 	}
 }
 
@@ -50,8 +50,8 @@ func (m *metrics) dump(l *log.Logger) {
 	k := 0
 	for n, d := range m.times {
 		s[k] = ndpair{
-			n:	n,
-			d:	d,
+			n: n,
+			d: d,
 		}
 		k++
 	}
@@ -73,12 +73,12 @@ func (m *metrics) dump(l *log.Logger) {
 }
 
 type ndpair struct {
-	n	string
-	d	time.Duration
+	n string
+	d time.Duration
 }
 
 type ndpairs []ndpair
 
-func (s ndpairs) Less(i, j int) bool	{ return s[i].d < s[j].d }
-func (s ndpairs) Swap(i, j int)		{ s[i], s[j] = s[j], s[i] }
-func (s ndpairs) Len() int		{ return len(s) }
+func (s ndpairs) Less(i, j int) bool { return s[i].d < s[j].d }
+func (s ndpairs) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s ndpairs) Len() int           { return len(s) }

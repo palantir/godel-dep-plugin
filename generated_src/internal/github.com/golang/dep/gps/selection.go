@@ -8,21 +8,21 @@ type selection struct {
 	// projects is a stack of the atoms that have currently been selected by the
 	// solver. It can also be thought of as the vertex set of the current
 	// selection graph.
-	projects	[]selected
+	projects []selected
 	// deps records the set of dependers on a given ProjectRoot. It is
 	// essentially an adjacency list of *inbound* edges.
-	deps	map[ProjectRoot][]dependency
+	deps map[ProjectRoot][]dependency
 	// foldRoots records a mapping from a canonical, case-folded form of
 	// ProjectRoots to the particular case variant that has currently been
 	// selected.
-	foldRoots	map[string]ProjectRoot
+	foldRoots map[string]ProjectRoot
 	// The versoinUnifier in use for this solve run.
-	vu	*versionUnifier
+	vu *versionUnifier
 }
 
 type selected struct {
-	a	atomWithPackages
-	first	bool
+	a     atomWithPackages
+	first bool
 }
 
 func (s *selection) getDependenciesOn(id ProjectIdentifier) []dependency {
@@ -54,8 +54,8 @@ func (s *selection) getIdentFor(pr ProjectRoot) (ProjectIdentifier, bool) {
 // packages, or merely some new packages on a project that was already selected.
 func (s *selection) pushSelection(a atomWithPackages, pkgonly bool) {
 	s.projects = append(s.projects, selected{
-		a:	a,
-		first:	!pkgonly,
+		a:     a,
+		first: !pkgonly,
 	})
 }
 
@@ -183,8 +183,8 @@ func (s *selection) selected(id ProjectIdentifier) (atomWithPackages, bool) {
 }
 
 type unselected struct {
-	sl	[]bimodalIdentifier
-	cmp	func(i, j int) bool
+	sl  []bimodalIdentifier
+	cmp func(i, j int) bool
 }
 
 func (u unselected) Len() int {

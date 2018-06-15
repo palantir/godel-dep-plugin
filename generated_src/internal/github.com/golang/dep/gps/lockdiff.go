@@ -17,8 +17,8 @@ import (
 // * Modified: Previous != nil, Current != nil
 // * No Change: Previous = Current, or a nil pointer
 type StringDiff struct {
-	Previous	string
-	Current		string
+	Previous string
+	Current  string
 }
 
 func (diff *StringDiff) String() string {
@@ -44,21 +44,21 @@ func (diff *StringDiff) String() string {
 // LockDiff is the set of differences between an existing lock file and an updated lock file.
 // Fields are only populated when there is a difference, otherwise they are empty.
 type LockDiff struct {
-	HashDiff	*StringDiff
-	Add		[]LockedProjectDiff
-	Remove		[]LockedProjectDiff
-	Modify		[]LockedProjectDiff
+	HashDiff *StringDiff
+	Add      []LockedProjectDiff
+	Remove   []LockedProjectDiff
+	Modify   []LockedProjectDiff
 }
 
 // LockedProjectDiff contains the before and after snapshot of a project reference.
 // Fields are only populated when there is a difference, otherwise they are empty.
 type LockedProjectDiff struct {
-	Name		ProjectRoot
-	Source		*StringDiff
-	Version		*StringDiff
-	Branch		*StringDiff
-	Revision	*StringDiff
-	Packages	[]StringDiff
+	Name     ProjectRoot
+	Source   *StringDiff
+	Version  *StringDiff
+	Branch   *StringDiff
+	Revision *StringDiff
+	Packages []StringDiff
 }
 
 // DiffLocks compares two locks and identifies the differences between them.
@@ -96,23 +96,23 @@ func DiffLocks(l1 Lock, l2 Lock) *LockDiff {
 			pr2 := lp2.pi.ProjectRoot
 
 			switch strings.Compare(string(pr1), string(pr2)) {
-			case 0:	// Found a matching project
+			case 0: // Found a matching project
 				matched = true
 				pdiff := DiffProjects(lp1, lp2)
 				if pdiff != nil {
 					diff.Modify = append(diff.Modify, *pdiff)
 				}
-				i2next = i2 + 1	// Don't evaluate to this again
-			case +1:	// Found a new project
+				i2next = i2 + 1 // Don't evaluate to this again
+			case +1: // Found a new project
 				add := buildLockedProjectDiff(lp2)
 				diff.Add = append(diff.Add, add)
-				i2next = i2 + 1	// Don't evaluate to this again
-				continue	// Keep looking for a matching project
-			case -1:	// Project has been removed, handled below
+				i2next = i2 + 1 // Don't evaluate to this again
+				continue        // Keep looking for a matching project
+			case -1: // Project has been removed, handled below
 				continue
 			}
 
-			break	// Done evaluating this project, move onto the next
+			break // Done evaluating this project, move onto the next
 		}
 
 		if !matched {
@@ -129,7 +129,7 @@ func DiffLocks(l1 Lock, l2 Lock) *LockDiff {
 	}
 
 	if diff.HashDiff == nil && len(diff.Add) == 0 && len(diff.Remove) == 0 && len(diff.Modify) == 0 {
-		return nil	// The locks are the equivalent
+		return nil // The locks are the equivalent
 	}
 	return &diff
 }
@@ -153,12 +153,12 @@ func buildLockedProjectDiff(lp LockedProject) LockedProjectDiff {
 	}
 
 	add := LockedProjectDiff{
-		Name:		lp.pi.ProjectRoot,
-		Source:		source,
-		Revision:	rev,
-		Version:	version,
-		Branch:		branch,
-		Packages:	make([]StringDiff, len(lp.Packages())),
+		Name:     lp.pi.ProjectRoot,
+		Source:   source,
+		Revision: rev,
+		Version:  version,
+		Branch:   branch,
+		Packages: make([]StringDiff, len(lp.Packages())),
 	}
 	for i, pkg := range lp.Packages() {
 		add.Packages[i] = StringDiff{Previous: pkg, Current: pkg}
@@ -211,19 +211,19 @@ func DiffProjects(lp1 LockedProject, lp2 LockedProject) *LockedProjectDiff {
 			pkg2 := p2[i2]
 
 			switch strings.Compare(pkg1, pkg2) {
-			case 0:	// Found matching package
+			case 0: // Found matching package
 				matched = true
-				i2next = i2 + 1	// Don't evaluate to this again
-			case +1:	// Found a new package
+				i2next = i2 + 1 // Don't evaluate to this again
+			case +1: // Found a new package
 				add := StringDiff{Current: pkg2}
 				diff.Packages = append(diff.Packages, add)
-				i2next = i2 + 1	// Don't evaluate to this again
-				continue	// Keep looking for a match
-			case -1:	// Package has been removed (handled below)
+				i2next = i2 + 1 // Don't evaluate to this again
+				continue        // Keep looking for a match
+			case -1: // Package has been removed (handled below)
 				continue
 			}
 
-			break	// Done evaluating this package, move onto the next
+			break // Done evaluating this package, move onto the next
 		}
 
 		if !matched {
@@ -239,7 +239,7 @@ func DiffProjects(lp1 LockedProject, lp2 LockedProject) *LockedProjectDiff {
 	}
 
 	if diff.Source == nil && diff.Version == nil && diff.Revision == nil && len(diff.Packages) == 0 {
-		return nil	// The projects are equivalent
+		return nil // The projects are equivalent
 	}
 	return &diff
 }

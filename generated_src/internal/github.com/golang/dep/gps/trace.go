@@ -13,12 +13,12 @@ import (
 )
 
 const (
-	successChar	= "✓"
-	successCharSp	= successChar + " "
-	failChar	= "✗"
-	failCharSp	= failChar + " "
-	backChar	= "←"
-	innerIndent	= "  "
+	successChar   = "✓"
+	successCharSp = successChar + " "
+	failChar      = "✗"
+	failCharSp    = failChar + " "
+	backChar      = "←"
+	innerIndent   = "  "
 )
 
 func (s *solver) traceCheckPkgs(bmi bimodalIdentifier) {

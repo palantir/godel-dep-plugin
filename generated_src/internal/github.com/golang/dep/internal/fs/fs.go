@@ -347,8 +347,8 @@ func ReadActualFilenames(dirPath string, names []string) (map[string]string, err
 }
 
 var (
-	errSrcNotDir	= errors.New("source is not a directory")
-	errDstExist	= errors.New("destination already exists")
+	errSrcNotDir = errors.New("source is not a directory")
+	errDstExist  = errors.New("destination already exists")
 )
 
 // CopyDir recursively copies a directory tree, attempting to preserve permissions.
