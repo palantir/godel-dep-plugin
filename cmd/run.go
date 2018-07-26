@@ -13,6 +13,8 @@ import (
 var runCmd = &cobra.Command{
 	Use:   "run [flags] [args]",
 	Short: "Run dep with the provided arguments",
+	Long: `Executes "dep" using the bundled version of dep with the provided flags and arguments. The "--" separator must be used 
+before specifying any flags for the "dep" program. For example, "./godelw run-dep -- -h" executes "dep -h".`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return depplugin.Run(args, cmd.OutOrStdout())
 	},
