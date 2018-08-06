@@ -45,12 +45,6 @@
   revision = "cc9eb1d7ad760af14e8f918698f745e80377af4f"
 
 [[projects]]
-  name = "github.com/go-yaml/yaml"
-  packages = ["."]
-  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
-  version = "v2.2.1"
-
-[[projects]]
   name = "github.com/golang/dep"
   packages = [
     ".",
@@ -295,6 +289,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "61e3971111f7603634594eb2a0f92b49dc6a59adcb59d38a52c7c4c0785f0aa7"
+  inputs-digest = "cfb47902f9fe93ca278bb51d494fc2c8a4c3da9f31e8b34af8506d179a803d68"
   solver-name = "gps-cdcl"
   solver-version = 1
