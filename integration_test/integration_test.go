@@ -159,8 +159,7 @@ func TestDepVerifyApplyFalseFails(t *testing.T) {
 	runPluginCleanup, err = pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"--verify"}, projectDir, false, outputBuf)
 	defer runPluginCleanup()
 	require.Error(t, err)
-	// if verification is due to vendor state not matching expected state, there should not be error output
-	assert.Equal(t, "", outputBuf.String())
+	assert.Equal(t, "Error: # Gopkg.lock is out of sync:\ngithub.com/pkg/errors: imported or required, but missing from Gopkg.lock's input-imports\n\n", outputBuf.String())
 }
 
 func TestDepVerifyApplyFalseExecErrorFails(t *testing.T) {
@@ -205,12 +204,12 @@ func TestDepVerifyApplyFalseExecErrorFails(t *testing.T) {
 	require.NoError(t, err)
 
 	outputBuf = &bytes.Buffer{}
-	runPluginCleanup, err = pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"--verify"}, projectDir, false, outputBuf)
+	runPluginCleanup, err = pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{}, projectDir, false, outputBuf)
 	defer runPluginCleanup()
 	require.Error(t, err)
 	// if verification is due to error besides vendor state not matching expected state, verification output should
 	// include error output
-	assert.Equal(t, fmt.Sprintf(`Error: found 1 errors in the package tree:
+	assert.Equal(t, fmt.Sprintf(`found 1 errors in the package tree:
 %s:1:23: expected 'STRING', found 'IDENT' github
 `, files["foo.go"].Path), outputBuf.String())
 }

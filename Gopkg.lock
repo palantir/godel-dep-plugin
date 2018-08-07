@@ -2,11 +2,10 @@
 
 
 [[projects]]
-  branch = "parse-constraints-with-dash-in-pre"
+  branch = "2.x"
   name = "github.com/Masterminds/semver"
   packages = ["."]
-  revision = "a93e51b5a57ef416dac8bb02d11407b6f55d8929"
-  source = "https://github.com/carolynvs/semver.git"
+  revision = "3c92f33da7a84de8314f3ff82e5f919b89fd1492"
 
 [[projects]]
   name = "github.com/Masterminds/vcs"
@@ -46,12 +45,6 @@
   revision = "cc9eb1d7ad760af14e8f918698f745e80377af4f"
 
 [[projects]]
-  name = "github.com/go-yaml/yaml"
-  packages = ["."]
-  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
-  version = "v2.2.1"
-
-[[projects]]
   name = "github.com/golang/dep"
   packages = [
     ".",
@@ -60,6 +53,7 @@
     "gps/internal/pb",
     "gps/paths",
     "gps/pkgtree",
+    "gps/verify",
     "internal/feedback",
     "internal/fs",
     "internal/importers",
@@ -72,8 +66,8 @@
     "internal/importers/gvt",
     "internal/importers/vndr",
   ]
-  revision = "37d9ea0ac16f0e0a05afc3b60e1ac8c364b6c329"
-  version = "v0.4.1"
+  revision = "224a564abe296670b692fe08bb63a3e4c4ad7978"
+  version = "v0.5.0"
 
 [[projects]]
   branch = "master"
@@ -201,10 +195,10 @@
   revision = "23395ebeee5df1083443a6261e5f674a76af91b6"
 
 [[projects]]
-  branch = "master"
   name = "github.com/pelletier/go-toml"
   packages = ["."]
-  revision = "66540cf1fcd2c3aee6f6787dfa32a6ae9a870f12"
+  revision = "c01d1270ff3e442a8a57cddc1c92dc1138598194"
+  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -295,6 +289,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c6dae2ee88904f0882cefd5528a324dcaf7d05afcb9ea1dd187430366de5092b"
+  inputs-digest = "cfb47902f9fe93ca278bb51d494fc2c8a4c3da9f31e8b34af8506d179a803d68"
   solver-name = "gps-cdcl"
   solver-version = 1

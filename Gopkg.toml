@@ -28,12 +28,7 @@ required = ["github.com/golang/dep/cmd/dep"]
 
 [[constraint]]
   name = "github.com/golang/dep"
-  version = "0.4.1"
-
-[[constraint]]
-  branch = "parse-constraints-with-dash-in-pre"
-  name = "github.com/Masterminds/semver"
-  source = "https://github.com/carolynvs/semver.git"
+  version = "=0.5.0"
 
 [[constraint]]
   name = "github.com/Masterminds/vcs"

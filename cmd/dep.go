@@ -24,6 +24,6 @@ be used before specifying any flags for the "dep" program. For example, "./godel
 }
 
 func init() {
-	depCmd.Flags().BoolVar(&verifyFlagVal, "verify", false, "verify files match formatting without applying formatting")
+	depCmd.Flags().BoolVar(&verifyFlagVal, "verify", false, "If --apply=false, runs `dep check`, otherwise runs `dep ensure`")
 	rootCmd.AddCommand(depCmd)
 }

@@ -42,9 +42,7 @@ func Verify() error {
 	}
 
 	args := []string{
-		"ensure",
-		"-no-vendor",
-		"-dry-run",
+		"check",
 	}
 	cmd := exec.Command(pathToSelf, append([]string{amalgomated.ProxyCmdPrefix + "dep"}, args...)...)
 	if output, err := cmd.CombinedOutput(); err != nil {
