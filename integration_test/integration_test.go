@@ -157,9 +157,10 @@ func TestDepVerifyApplyFalseFails(t *testing.T) {
 
 	outputBuf = &bytes.Buffer{}
 	runPluginCleanup, err = pluginapitester.RunPlugin(pluginapitester.NewPluginProvider(pluginPath), nil, "dep", []string{"--verify"}, projectDir, false, outputBuf)
+	output := outputBuf.String()
 	defer runPluginCleanup()
-	require.Error(t, err)
-	assert.Equal(t, "Error: # Gopkg.lock is out of sync:\ngithub.com/pkg/errors: imported or required, but missing from Gopkg.lock's input-imports\n\n", outputBuf.String())
+	require.Error(t, err, "expected an error, but finished successfully with output: %s", output)
+	assert.Equal(t, "Error: Would have written Gopkg.lock.\nWould have updated the following projects in the vendor directory:\n\n(0/1) Would have written github.com/pkg/errors@v0.8.0: new project\n", output)
 }
 
 func TestDepVerifyApplyFalseExecErrorFails(t *testing.T) {

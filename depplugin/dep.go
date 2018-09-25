@@ -42,20 +42,21 @@ func Verify() error {
 	}
 
 	args := []string{
-		"check",
+		"ensure",
+		"-no-vendor",
+		"-dry-run",
 	}
 	cmd := exec.Command(pathToSelf, append([]string{amalgomated.ProxyCmdPrefix + "dep"}, args...)...)
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err := cmd.CombinedOutput()
+	if err != nil {
 		if _, ok := err.(*exec.ExitError); !ok {
 			// if error is not an exit error, wrap it
 			return errors.Wrapf(err, "failed to execute command %v", cmd.Args)
 		}
-
-		if strings.Contains(string(output), "Gopkg.lock was not up to date") {
-			// if error is that Gopkg.lock is not up-to-date, return empty error
-			return fmt.Errorf("")
-		}
 		// otherwise, error with output
+		return errors.Errorf(strings.TrimSuffix(string(output), "\n"))
+	} else if strings.Contains(string(output), "Would have written") {
+		// If dep ensure would make changes, return the output as an error
 		return errors.Errorf(strings.TrimSuffix(string(output), "\n"))
 	}
 	return nil
