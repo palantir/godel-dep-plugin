@@ -184,6 +184,35 @@
   version = "v2.0.0-rc10"
 
 [[projects]]
+  name = "github.com/palantir/godel-dep-plugin"
+  packages = [
+    "cmd",
+    "depplugin",
+    "generated_src",
+    "generated_src/internal/github.com/golang/dep",
+    "generated_src/internal/github.com/golang/dep/amalgomated_flag",
+    "generated_src/internal/github.com/golang/dep/cmd/dep",
+    "generated_src/internal/github.com/golang/dep/gps",
+    "generated_src/internal/github.com/golang/dep/gps/internal/pb",
+    "generated_src/internal/github.com/golang/dep/gps/paths",
+    "generated_src/internal/github.com/golang/dep/gps/pkgtree",
+    "generated_src/internal/github.com/golang/dep/gps/verify",
+    "generated_src/internal/github.com/golang/dep/internal/feedback",
+    "generated_src/internal/github.com/golang/dep/internal/fs",
+    "generated_src/internal/github.com/golang/dep/internal/importers",
+    "generated_src/internal/github.com/golang/dep/internal/importers/base",
+    "generated_src/internal/github.com/golang/dep/internal/importers/glide",
+    "generated_src/internal/github.com/golang/dep/internal/importers/glock",
+    "generated_src/internal/github.com/golang/dep/internal/importers/godep",
+    "generated_src/internal/github.com/golang/dep/internal/importers/govend",
+    "generated_src/internal/github.com/golang/dep/internal/importers/govendor",
+    "generated_src/internal/github.com/golang/dep/internal/importers/gvt",
+    "generated_src/internal/github.com/golang/dep/internal/importers/vndr",
+  ]
+  revision = "15ace793ecc1ab69e9ef3d103afd5609fb1a3e34"
+  version = "v1.1.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/palantir/pkg"
   packages = [
@@ -289,6 +318,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cfb47902f9fe93ca278bb51d494fc2c8a4c3da9f31e8b34af8506d179a803d68"
+  inputs-digest = "f3461578e6714cd368f518fa836d47abda5bfffd4ea5496e651c1e574b1b14d1"
   solver-name = "gps-cdcl"
   solver-version = 1
