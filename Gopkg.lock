@@ -226,6 +226,37 @@
   version = "v2.10.0"
 
 [[projects]]
+  digest = "1:7a716a4315651f9c6d8f2755e23f273a28c837b9d77697715e01999a4be4e8f7"
+  name = "github.com/palantir/godel-dep-plugin"
+  packages = [
+    "cmd",
+    "depplugin",
+    "generated_src",
+    "generated_src/internal/github.com/golang/dep",
+    "generated_src/internal/github.com/golang/dep/amalgomated_flag",
+    "generated_src/internal/github.com/golang/dep/cmd/dep",
+    "generated_src/internal/github.com/golang/dep/gps",
+    "generated_src/internal/github.com/golang/dep/gps/internal/pb",
+    "generated_src/internal/github.com/golang/dep/gps/paths",
+    "generated_src/internal/github.com/golang/dep/gps/pkgtree",
+    "generated_src/internal/github.com/golang/dep/gps/verify",
+    "generated_src/internal/github.com/golang/dep/internal/feedback",
+    "generated_src/internal/github.com/golang/dep/internal/fs",
+    "generated_src/internal/github.com/golang/dep/internal/importers",
+    "generated_src/internal/github.com/golang/dep/internal/importers/base",
+    "generated_src/internal/github.com/golang/dep/internal/importers/glide",
+    "generated_src/internal/github.com/golang/dep/internal/importers/glock",
+    "generated_src/internal/github.com/golang/dep/internal/importers/godep",
+    "generated_src/internal/github.com/golang/dep/internal/importers/govend",
+    "generated_src/internal/github.com/golang/dep/internal/importers/govendor",
+    "generated_src/internal/github.com/golang/dep/internal/importers/gvt",
+    "generated_src/internal/github.com/golang/dep/internal/importers/vndr",
+  ]
+  pruneopts = "UT"
+  revision = "15ace793ecc1ab69e9ef3d103afd5609fb1a3e34"
+  version = "v1.1.0"
+
+[[projects]]
   branch = "master"
   digest = "1:8207297e673becd7f1ca6cfde2e70bb183679d8a3a8886fd51d0a4751730f241"
   name = "github.com/palantir/pkg"
@@ -375,6 +406,28 @@
     "github.com/nmiyake/pkg/dirs",
     "github.com/nmiyake/pkg/gofiles",
     "github.com/palantir/amalgomate/amalgomated",
+    "github.com/palantir/godel-dep-plugin/cmd",
+    "github.com/palantir/godel-dep-plugin/depplugin",
+    "github.com/palantir/godel-dep-plugin/generated_src",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/amalgomated_flag",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/cmd/dep",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/internal/pb",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/paths",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/pkgtree",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/gps/verify",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/feedback",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/fs",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/base",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/glide",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/glock",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/godep",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/govend",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/govendor",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/gvt",
+    "github.com/palantir/godel-dep-plugin/generated_src/internal/github.com/golang/dep/internal/importers/vndr",
     "github.com/palantir/godel/framework/pluginapi",
     "github.com/palantir/godel/framework/pluginapi/v2/pluginapi",
     "github.com/palantir/godel/framework/pluginapitester",
