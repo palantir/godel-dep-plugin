@@ -210,6 +210,6 @@ func TestDepVerifyApplyFalseExecErrorFails(t *testing.T) {
 	// if verification is due to error besides vendor state not matching expected state, verification output should
 	// include error output
 	assert.Equal(t, fmt.Sprintf(`found 1 errors in the package tree:
-%s:1:23: expected 'STRING', found 'IDENT' github
+%s:1:23: expected 'STRING', found github
 `, files["foo.go"].Path), outputBuf.String())
 }
