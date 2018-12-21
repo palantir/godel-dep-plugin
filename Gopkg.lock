@@ -180,8 +180,8 @@
     "pkg/products/v2/products",
     "pkg/versionedconfig",
   ]
-  revision = "e952ea3e373a433e2a8a8a3cdfb06b0de0b35462"
-  version = "v2.0.0-rc10"
+  revision = "c84c8364bb86cadfda2d76c6a1fa00ccbe359967"
+  version = "v2.10.0"
 
 [[projects]]
   branch = "master"
@@ -289,6 +289,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cfb47902f9fe93ca278bb51d494fc2c8a4c3da9f31e8b34af8506d179a803d68"
+  inputs-digest = "7e9d49f1171e3b7bf8c58e2233089a8aafb4ad08c41dfbdb83a933a6d6746dae"
   solver-name = "gps-cdcl"
   solver-version = 1

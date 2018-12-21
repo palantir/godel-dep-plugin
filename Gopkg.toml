@@ -36,23 +36,7 @@ required = ["github.com/golang/dep/cmd/dep"]
 
 [[constraint]]
   name = "github.com/palantir/godel"
-  version = "2.0.0-rc10"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/palantir/pkg"
-
-[[constraint]]
-  name = "github.com/pkg/errors"
-  version = "0.8.0"
-
-[[constraint]]
-  name = "github.com/spf13/cobra"
-  version = "0.0.2"
-
-[[constraint]]
-  name = "github.com/stretchr/testify"
-  version = "1.2.1"
+  version = "2.0.0"
 
 [prune]
   go-tests = true
