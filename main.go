@@ -11,7 +11,7 @@ import (
 	"github.com/palantir/godel/framework/pluginapi/v2/pluginapi"
 
 	"github.com/palantir/godel-dep-plugin/cmd"
-	"github.com/palantir/godel-dep-plugin/generated_src"
+	amalgomateddep "github.com/palantir/godel-dep-plugin/generated_src"
 )
 
 func main() {
